@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class EdemController {
-
     @GetMapping("/")
     public String homePage() {
         return "home/main";
@@ -15,9 +14,13 @@ public class EdemController {
     @GetMapping("/registration")
     public String registration(Model model) {
         //model.addAttribute("title", "Про нас:");
-        return "home/registration";
+        return "authorization/registration";
     }
-
+    @GetMapping("/login")
+    public String login(Model model) {
+        //model.addAttribute("title", "Про нас:");
+        return "authorization/login";
+    }
 
 
 }
