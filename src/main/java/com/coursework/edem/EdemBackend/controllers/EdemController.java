@@ -13,5 +13,15 @@ public class EdemController {
         return "home/main";
     }
 
+    @GetMapping("/login")
+    public String loginPage() {
+        return "authorization/login";
+    }
+
+    @GetMapping("/registration")
+    public String registrationPage() {
+        return "authorization/registration";
+    }
+
 
 }
