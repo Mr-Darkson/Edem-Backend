@@ -2,8 +2,8 @@ package com.coursework.edem.EdemBackend.repositories;
 
 
 import com.coursework.edem.EdemBackend.models.Message;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface MessageRepository extends CrudRepository<Message, Long> {
-
+import java.util.List;
+public interface MessageRepository extends JpaRepository<Message, Integer>  {
 }
