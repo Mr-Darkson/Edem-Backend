@@ -11,7 +11,7 @@
 <div class = "container mt-5">
     <h1>Диалоги</h1>
     <div th:each = "el : ${messages}" class = "alert alert-info mt-2">
-        <h3 th:text = "${el.message_text}"/>
+        <h3 th:text = "${el.title}"/>
         <a th:href="'/dialog/' + ${el.id}" class="btn btn-warning">Перейти к диалогу</a>
     </div>
 </div>

@@ -19,28 +19,21 @@ public class MessageController {
     private MessageRepository messageRepository;
 
     @GetMapping("/mailbox")
-    public String dialogs(Model model) {
+    public String mailbox(Model model) {
         Iterable<Message> messages = messageRepository.findAll();
         model.addAttribute("messages", messages);
         return "account/messages/mailbox";
     }
 
-//    @GetMapping("/dialog/{id}")
-//    public String dialog(@PathVariable(value = "id") long id, Model model) {
-//        if (!messageRepository.existsById(id)) { // Сюда айди диалога надо сунуть
-//            return "redirect:/dialogs"; // Тут написать мол диалогов нет
-//        }
-//        Optional<Message> message = messageRepository.findById(id); // Сюда айди диалога надо сунуть
-//        ArrayList<Message> res = new ArrayList<>();
-//        message.ifPresent(res::add);
-//        model.addAttribute("message", res);
-//        return "account/messages/dialog";
-//    }
+    @GetMapping("/sendmessage")
+    public String sendMessage(Model model){
+        return "account/messages/sendmessage";
+    }
 
-//    @PostMapping("/dialog/{id}")
-//    public String blogPostAdd(@PathVariable(value = "id") Long id, @RequestParam String text,  Model model){
-//        Message message = new Message(id, 0L, 1L, text);
-//        messageRepository.save(message);
-//        return "redirect:/dialogs";
-//    }
+    @PostMapping("/sendmessage")
+    public String sendMessagePost(@RequestParam String title, @RequestParam String message_text, Model model){
+        Message message = new Message(1L, 1L, title, message_text);
+        messageRepository.save(message);
+        return "redirect:/mailbox";
+    }
 }
