@@ -31,8 +31,8 @@ public class MessageController {
     }
 
     @PostMapping("/sendmessage")
-    public String sendMessagePost(@RequestParam String title, @RequestParam String message_text, Model model){
-        Message message = new Message(1L, 1L, title, message_text);
+    public String sendMessagePost(@RequestParam Long id, @RequestParam String title, @RequestParam String message_text, Model model){
+        Message message = new Message(id, 1L, title, message_text);
         messageRepository.save(message);
         return "redirect:/mailbox";
     }
