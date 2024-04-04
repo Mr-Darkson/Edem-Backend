@@ -1,12 +1,17 @@
 package com.coursework.edem.EdemBackend.models;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Min;
+
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+import java.util.Date;
+
 
 @Entity
 @Table(name = "person")
@@ -14,26 +19,30 @@ public class Person {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+    private Long id;
     @Column(name = "login")
-    @NotEmpty(message = "login not should be empty")
-    @Size(min = 4, max = 25, message = "login should be between 4 and 25 characters")
     private String login;
-
     @Column(name = "password")
-    @NotEmpty(message = "password not should be empty")
-    @Size(min = 6, max = 50)
     private String password;
+    @Column(name = "createdAt")
+    private Date createdAt;
+    @Lob
+    @Column(name = "avatar")
+    private byte[] avatar;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    public Person(String login, String password, Date createdAt, byte[] avatar) {
+        this.login = login;
+        this.password = password;
+        this.createdAt = createdAt;
+        this.avatar = avatar;
+    }
+    public Person(){}
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -53,11 +62,19 @@ public class Person {
         this.password = password;
     }
 
-    public LocalDateTime getCreatedAt() {
+    public Date getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDateTime createdAt) {
+    public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public byte[] getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(byte[] avatar) {
+        this.avatar = avatar;
     }
 }

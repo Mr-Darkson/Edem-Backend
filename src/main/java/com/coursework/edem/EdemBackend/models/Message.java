@@ -1,19 +1,45 @@
 package com.coursework.edem.EdemBackend.models;
 
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+
 @Entity
+@Table(name = "message")
 public class Message {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String text;
-    private Long sender;
-    private Long receiver;
-    private Long dialogId;
+    @Column(name = "receiver_id")
+    private Long receiver_id;
+    @Column(name = "sender_id")
+    private Long sender_id;
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "message_text")
+    private String message_text;
+
+    public Message(Long receiver_id, Long sender_id, String title, String message_text) {
+        this.receiver_id = receiver_id;
+        this.sender_id = sender_id;
+        this.title = title;
+        this.message_text = message_text;
+    }
+
+    public Message() {
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public Long getId() {
         return id;
@@ -23,42 +49,27 @@ public class Message {
         this.id = id;
     }
 
-    public Long getDialogId() {
-        return dialogId;
+    public Long getReceiver_id() {
+        return receiver_id;
     }
 
-    public void setDialogId(Long dialogId) {
-        this.dialogId = dialogId;
+    public void setReceiver_id(Long receiver_id) {
+        this.receiver_id = receiver_id;
     }
 
-    public String getText() {
-        return text;
+    public Long getSender_id() {
+        return sender_id;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setSender_id(Long sender_id) {
+        this.sender_id = sender_id;
     }
 
-    public Long getSender() {
-        return sender;
+    public String getMessage_text() {
+        return message_text;
     }
 
-    public void setSender(Long sender) {
-        this.sender = sender;
-    }
-
-    public Long getReceiver() {
-        return receiver;
-    }
-
-    public void setReceiver(Long receiver) {
-        this.receiver = receiver;
-    }
-    public Message(){}
-    public Message(Long dialogId, Long sender, Long receiver, String text){
-        this.dialogId = dialogId;
-        this.sender = sender;
-        this.receiver = receiver;
-        this.text = text;
+    public void setMessage_text(String message_text) {
+        this.message_text = message_text;
     }
 }
