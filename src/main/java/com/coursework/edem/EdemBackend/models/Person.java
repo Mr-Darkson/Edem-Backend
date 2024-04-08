@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 
@@ -19,19 +20,31 @@ public class Person {
     private String login;
     @Column(name = "password")
     private String password;
-    @Column(name = "createdAt")
+    @Column(name = "createdat")
     private Date createdAt;
     @Lob
     @Column(name = "avatar")
     private byte[] avatar;
 
-    public Person(String login, String password, Date createdAt, byte[] avatar) {
+    @Column(name = "last_login")
+    private LocalDateTime lastLogin;
+
+    public Person(String login, String password, Date createdAt, byte[] avatar, LocalDateTime lastLogin) {
         this.login = login;
         this.password = password;
         this.createdAt = createdAt;
         this.avatar = avatar;
+        this.lastLogin = lastLogin;
     }
     public Person(){}
+
+    public LocalDateTime getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(LocalDateTime lastLogin) {
+        this.lastLogin = lastLogin;
+    }
 
     public Long getId() {
         return id;
