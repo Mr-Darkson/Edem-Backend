@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import org.hibernate.annotations.Type;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -21,15 +22,15 @@ public class Person {
     @Column(name = "password")
     private String password;
     @Column(name = "createdat")
-    private Date createdAt;
-    @Lob
+    private LocalDateTime createdAt;
+
     @Column(name = "avatar")
-    private byte[] avatar;
+    private String avatar;
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
 
-    public Person(String login, String password, Date createdAt, byte[] avatar, LocalDateTime lastLogin) {
+    public Person(String login, String password, LocalDateTime createdAt, String avatar, LocalDateTime lastLogin) {
         this.login = login;
         this.password = password;
         this.createdAt = createdAt;
@@ -70,19 +71,19 @@ public class Person {
         this.password = password;
     }
 
-    public Date getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public byte[] getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(byte[] avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 }

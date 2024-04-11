@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Загрузить фото</title>
+</head>
+<body>
+Выберите изображение(до 1Мб):
+<form enctype="multipart/form-data" th:method="POST" th:action="@{'/profile/'+${id}+'/change_avatar'}">
+    <input type="file" name="file"/>
+    <input type="submit" value="Загрузить">
+</form>
+<span th:text="${error}"></span>
+</body>
+</html>
