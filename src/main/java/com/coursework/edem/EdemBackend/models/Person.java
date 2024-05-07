@@ -9,10 +9,12 @@ import java.time.LocalDateTime;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Data;
 
 import java.util.Date;
 
 
+@Data
 @Entity
 @Table(name = "person")
 public class Person {
@@ -20,61 +22,28 @@ public class Person {
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "login")
     private String login;
+
     @Column(name = "password")
     private String password;
-    @Column(name = "createdAt")
-    private Date createdAt;
-    @Lob
-    @Column(name = "avatar")
-    private byte[] avatar;
 
-    public Person(String login, String password, Date createdAt, byte[] avatar) {
+    @Transient
+    private String repeatPassword;
+
+    @Column(name = "createdat")
+    private Date createdAt;
+
+    @Column(name = "last_login")
+    private Date lastLogin;
+
+    public Person(String login, String password, Date createdAt, byte[] avatar, Date lastLogin) {
         this.login = login;
         this.password = password;
         this.createdAt = createdAt;
-        this.avatar = avatar;
+        this.lastLogin = lastLogin;
     }
     public Person(){}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public byte[] getAvatar() {
-        return avatar;
-    }
-
-    public void setAvatar(byte[] avatar) {
-        this.avatar = avatar;
-    }
 }

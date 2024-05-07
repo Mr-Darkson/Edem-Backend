@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ваши письма</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div th:text="${'Вы авторизированы как: ' + person.getLogin()}">Profile Info</div>
+
+<div class = "container mt-5">
+    <h1>Диалоги</h1>
+    <div th:each = "el : ${messages}" class = "alert alert-info mt-2">
+        <h3 th:text = "${el.title}"/>
+        <a th:href="'/dialog/' + ${el.id}" class="btn btn-warning">Перейти к диалогу</a>
+    </div>
+</div>
+
+<a th:href="@{/auth/logout}">Выйти</a>
+
+
+</body>
+</html>
