@@ -30,7 +30,7 @@ public class Person {
     @Column(name = "last_login")
     private Date lastLogin;
 
-    @Column(name = "avatar")
+    @Transient
     private String avatar;
 
     public Person(String login, String password, Date createdAt, byte[] avatar, Date lastLogin) {
