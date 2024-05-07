@@ -21,4 +21,16 @@ public class PersonService {
         personRepository.save(person);
     }
 
+    public Person getPersonById(Long id) {
+        return personRepository.findById(id).orElse(null);
+    }
+
+
+    @Transactional(readOnly = false)
+    public void updateAvatar(Long id, String newAvatar) {
+        Person person = getPersonById(id);
+        person.setAvatar(newAvatar);
+        personRepository.save(person);
+
+    }
 }

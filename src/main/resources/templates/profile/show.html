@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Profile</title>
+</head>
+<body>
+<h1>User Profile</h1>
+<img th:src="@{${person.getAvatar()}}" width="100" height="100"/>
+<a th:href="@{/profile/{id}/change_avatar(id=${person.getId()})}">Change avatar</a>
+<p>ID: <span th:text="${person.getId()}"></span></p>
+<p>Login: <span th:text="${person.getLogin()}"></span></p>
+<p>Password: <span th:text="${person.getPassword()}"></span></p>
+<p>Created At: <span th:text="${person.getCreatedAt()}"></span></p>
+<p>Last Login: <span th:text="${person.getLastLogin()}"></span></p>
+</body>
+</html>
