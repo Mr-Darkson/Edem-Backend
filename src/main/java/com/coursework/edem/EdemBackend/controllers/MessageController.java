@@ -6,6 +6,7 @@ import com.coursework.edem.EdemBackend.models.Person;
 import com.coursework.edem.EdemBackend.repositories.MessageRepository;
 import com.coursework.edem.EdemBackend.repositories.PersonRepository;
 import com.coursework.edem.EdemBackend.security.PersonDetails;
+import com.coursework.edem.EdemBackend.services.MessageService;
 import com.coursework.edem.EdemBackend.services.PersonService;
 import com.coursework.edem.EdemBackend.utils.AvatarFileValidator;
 import jakarta.validation.Valid;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -26,7 +28,7 @@ import java.util.Optional;
 @RequestMapping("/service")
 public class MessageController {
 
-    private final MessageRepository messageRepository;
+    private final MessageService messageService;
     private final PersonService personService;
     private final AvatarFileValidator avatarFileValidator;
 
@@ -60,7 +62,8 @@ public class MessageController {
     @GetMapping("/mailbox")
     public String mailbox(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
-        Iterable<Message> messages = messageRepository.findAll();
+
+        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId());
         model.addAttribute("messages", messages);
         return "account/messages/mailbox";
     }
@@ -75,7 +78,7 @@ public class MessageController {
         var messageGetter = personService.getPersonByLogin(login);
         if (messageGetter.isPresent()){
             Message message = new Message(messageGetter.get().getId(), personDetails.getPerson().getId(), title, message_text);
-            messageRepository.save(message);
+            messageService.save(message);
         }
         return "redirect:/service/mailbox";
     }
