@@ -8,8 +8,8 @@
 <body>
 <div class = "container mt-5 mb-5">
     <h1>Отправить письмо</h1>
-    <form action="/sendmessage" method="post">
-        <input type="number" name = "id" placeholder="Введите id получателя" class="form-control"><br>
+    <form action="/service/sendmessage" method="post">
+        <input type="text" name = "login" placeholder="Введите login получателя" class="form-control"><br>
         <input type="text" name = "title" placeholder="Введите заголовок письма" class="form-control"><br>
         <textarea name = "message_text" placeholder="Введите текст" class="form-control"></textarea><br>
         <button type = "submit" class="btn btn-success">Отправить письмо</button>
