@@ -19,8 +19,12 @@ import java.util.Optional;
 @AllArgsConstructor
 @RequestMapping("/service")
 public class MessageController {
+    
     private final MessageRepository messageRepository;
+
     private final PersonRepository personRepository;
+
+
 
 
     @GetMapping("/profile")
