@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import org.hibernate.annotations.Cascade;
 
 import java.util.Date;
 
@@ -30,8 +31,12 @@ public class Person {
     @Column(name = "last_login")
     private Date lastLogin;
 
-    @Transient
-    private String avatar;
+    @Column(name = "username")
+    private String username;
+
+    @OneToOne(mappedBy = "person")
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
+    private Avatar avatar;
 
     public Person(String login, String password, Date createdAt, byte[] avatar, Date lastLogin) {
         this.login = login;

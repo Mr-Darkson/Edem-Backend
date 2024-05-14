@@ -15,7 +15,6 @@ import java.util.HashMap;
 
 @Controller
 public class PersonController {
-
     private final PersonService personService;
 
     @Autowired
@@ -57,15 +56,15 @@ public class PersonController {
         } else {
             //Head head = new Head();
             String fileName = file.getOriginalFilename();
-            String filePath = "C:\\edem\\Edem-Backend\\src\\main\\resources\\static\\images\\"; //путь для сохранения
-            String DBFilePath = "/images/" + fileName; // путь для бд
-            String fileAddress = filePath + fileName; // Адрес папки + имя = путь к картинке
+            String filePath = "C://edem/Edem-Backend/src/main/avatars/"; //путь для сохранения
+            String DBFilePath = fileName; // путь для бд
             try {
                 FileUtil.uploadFile(file.getBytes(), filePath, fileName);
 
                 personService.updateAvatar(id, DBFilePath);
 
             } catch (Exception e) {
+
             }
             return "redirect:/profile/" + id;
         }
