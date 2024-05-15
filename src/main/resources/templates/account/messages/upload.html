@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form th:action="@{/service/upload}" th:method="PATCH" th:object="${filesToUpload}" enctype="multipart/form-data">
+    <label for="multipartFile" >Файлы: </label>
+    <input type="file" th:field="*{multipartFile}" id="multipartFile" multiple>
+    <input type="submit" value="Сохранить">
+</form>
+</body>
+</html>

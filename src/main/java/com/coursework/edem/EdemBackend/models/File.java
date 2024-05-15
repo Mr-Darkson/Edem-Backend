@@ -16,13 +16,12 @@ public class File {
     private Long id;
     @Column(name = "message_id")
     private Long message_id;
-    @Column(name = "file")
-    private byte[] file;
+    @Column(name = "filename")
+    private String filename;
 
-    public File(Long id, Long message_id, byte[] file) {
-        this.id = id;
+    public File(Long message_id, String filename) {
         this.message_id = message_id;
-        this.file = file;
+        this.filename = filename;
     }
 
     public File(){}

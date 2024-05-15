@@ -76,7 +76,8 @@ public class PersonService {
 
         if (!newAvatar.isEmpty()) {
             String fileName = newAvatar.getOriginalFilename();
-            String filePath = "C://edem/Edem-Backend/src/main/avatars/";
+            // String filePath = "C://edem/Edem-Backend/src/main/avatars/"; // ваша версия пути
+            String filePath = "C://Users/User/Desktop/edem/Edem-Backend/src/main/avatars/";
             try {
                 FileUtil.uploadFile(newAvatar.getBytes(), filePath, fileName);
 

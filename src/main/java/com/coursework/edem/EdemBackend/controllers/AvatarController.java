@@ -22,7 +22,7 @@ public class AvatarController {
     private final AvatarService avatarService;
 
     @GetMapping("/avatar/{id}")
-    private ResponseEntity<byte[]> getImageById(@PathVariable Long id) {
+    public ResponseEntity<byte[]> getImageById(@PathVariable Long id) {
         File file = avatarService.getAvatarByPersonId(id);
 
         if (file.exists()) {

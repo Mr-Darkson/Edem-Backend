@@ -6,8 +6,10 @@ import com.coursework.edem.EdemBackend.models.Person;
 import com.coursework.edem.EdemBackend.repositories.MessageRepository;
 import com.coursework.edem.EdemBackend.repositories.PersonRepository;
 import com.coursework.edem.EdemBackend.security.PersonDetails;
+import com.coursework.edem.EdemBackend.services.FileUploadService;
 import com.coursework.edem.EdemBackend.services.MessageService;
 import com.coursework.edem.EdemBackend.services.PersonService;
+import com.coursework.edem.EdemBackend.util.FileValidator;
 import com.coursework.edem.EdemBackend.utils.AvatarFileValidator;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -31,7 +33,8 @@ public class MessageController {
     private final MessageService messageService;
     private final PersonService personService;
     private final AvatarFileValidator avatarFileValidator;
-
+    private final  FileValidator fileValidator;
+    private final FileUploadService fileUploadService;
 
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
@@ -62,10 +65,20 @@ public class MessageController {
     @GetMapping("/mailbox")
     public String mailbox(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
-
         List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId());
         model.addAttribute("messages", messages);
         return "account/messages/mailbox";
+    }
+
+    @GetMapping("/upload")
+    public String uploadFiles(@AuthenticationPrincipal PersonDetails personDetails, Model model){
+        model.addAttribute("filesToUpload", new AvatarFile());
+        return "account/messages/upload";
+    }
+    @PatchMapping("/upload")
+    public String uploadFilesPost(Model model, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @AuthenticationPrincipal PersonDetails personDetails){
+        fileUploadService.uploadFilesToServer(multipartFile, personDetails.getPerson().getId());
+        return "redirect:/service/upload";
     }
 
     @GetMapping("/sendmessage")
