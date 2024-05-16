@@ -40,9 +40,9 @@ public class FileService {
         List<File> files = fileRepository.findAllByMessageId(messageId);
 
         for (int i = 0; i < files.size(); i++) {
-            try{
+            try {
                 FileUtil.downloadFile(files.get(i).getFilename(), response);
-            } catch (IOException e){
+            } catch (IOException e) {
                 System.out.println("Error filename!");
             }
         }
