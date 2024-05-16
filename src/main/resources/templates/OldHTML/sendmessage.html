@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Отправить письмо</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+<div class = "container mt-5 mb-5">
+    <h1>Отправить письмо</h1>
+    <form action="/sendmessage" method="post">
+        <input type="number" name = "id" placeholder="Введите id получателя" class="form-control"><br>
+        <input type="text" name = "title" placeholder="Введите заголовок письма" class="form-control"><br>
+        <textarea name = "message_text" placeholder="Введите текст" class="form-control"></textarea><br>
+        <button type = "submit" class="btn btn-success">Отправить письмо</button>
+    </form>
+</div>
+</body>
+</html>
