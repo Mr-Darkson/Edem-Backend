@@ -90,25 +90,18 @@ public class MessageController {
         try {
             String dirPath = System.getProperty("user.dir") + "/src/main/data/demo.txt";
 
-            //Resource resource = new ClassPathResource("demo.txt");
             response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment; filename=" + ".txt");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "1.txt");
 
-
-            InputStream inputStream = new BufferedInputStream(new FileInputStream(dirPath));
-            //InputStream inputStream = resource.getInputStream();
-
-            // Get output stream of the response
+            InputStream inputStream = new FileInputStream(dirPath);
             OutputStream outputStream = response.getOutputStream();
 
-            // Copy input stream to output stream
             byte[] buffer = new byte[1024];
             int bytesRead;
             while ((bytesRead = inputStream.read(buffer)) != -1) {
                 outputStream.write(buffer, 0, bytesRead);
             }
 
-            // Close streams
             inputStream.close();
             outputStream.close();
 
