@@ -15,10 +15,11 @@ import java.util.UUID;
 public class FileUploadService {
     private final FileRepository fileRepository;
 
-    public void uploadFilesToServer(MultipartFile[] multipartFile, Long messageId){
+    public void uploadFilesToServer(MultipartFile[] multipartFile, Long messageId) {
         String filePath = "C://Users/User/Desktop/edem/Edem-Backend/src/main/data/";
         // String filePath = "C://edem/Edem-Backend/src/main/data/"; // версия для вас
-        for (int i=0;i<multipartFile.length;i++){
+        if (multipartFile.length == 1 && multipartFile[0].isEmpty()) return;
+        for (int i = 0; i < multipartFile.length; i++) {
             String fileName = UUID.randomUUID().toString() + multipartFile[i].getOriginalFilename();
             while (fileRepository.findByFilename(fileName).isPresent()) {
                 fileName = UUID.randomUUID().toString() + multipartFile[i].getOriginalFilename();

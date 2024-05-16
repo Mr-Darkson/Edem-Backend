@@ -2,9 +2,6 @@ package com.coursework.edem.EdemBackend.controllers;
 
 import com.coursework.edem.EdemBackend.models.AvatarFile;
 import com.coursework.edem.EdemBackend.models.Message;
-import com.coursework.edem.EdemBackend.models.Person;
-import com.coursework.edem.EdemBackend.repositories.MessageRepository;
-import com.coursework.edem.EdemBackend.repositories.PersonRepository;
 import com.coursework.edem.EdemBackend.security.PersonDetails;
 import com.coursework.edem.EdemBackend.services.FileUploadService;
 import com.coursework.edem.EdemBackend.services.MessageService;
@@ -13,7 +10,6 @@ import com.coursework.edem.EdemBackend.util.FileValidator;
 import com.coursework.edem.EdemBackend.utils.AvatarFileValidator;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,9 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -33,7 +27,7 @@ public class MessageController {
     private final MessageService messageService;
     private final PersonService personService;
     private final AvatarFileValidator avatarFileValidator;
-    private final  FileValidator fileValidator;
+    private final FileValidator fileValidator;
     private final FileUploadService fileUploadService;
 
     @GetMapping("/profile")
@@ -71,12 +65,13 @@ public class MessageController {
     }
 
     @GetMapping("/upload")
-    public String uploadFiles(@AuthenticationPrincipal PersonDetails personDetails, Model model){
+    public String uploadFiles(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("filesToUpload", new AvatarFile());
         return "account/messages/upload";
     }
+
     @PostMapping("/upload")
-    public String uploadFilesPost(Model model, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @AuthenticationPrincipal PersonDetails personDetails){
+    public String uploadFilesPost(Model model, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @AuthenticationPrincipal PersonDetails personDetails) {
         fileUploadService.uploadFilesToServer(multipartFile, personDetails.getPerson().getId());
         return "redirect:/service/upload";
     }
@@ -88,9 +83,9 @@ public class MessageController {
     }
 
     @PostMapping("/sendmessage")
-    public String sendMessagePost(@AuthenticationPrincipal PersonDetails personDetails,@ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
+    public String sendMessagePost(@AuthenticationPrincipal PersonDetails personDetails, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
         var messageGetter = personService.getPersonByLogin(login);
-        if (messageGetter.isPresent()){
+        if (messageGetter.isPresent()) {
             Message message = new Message(messageGetter.get().getId(), personDetails.getPerson().getId(), title, message_text);
             messageService.save(message);
             fileUploadService.uploadFilesToServer(multipartFile, message.getId());

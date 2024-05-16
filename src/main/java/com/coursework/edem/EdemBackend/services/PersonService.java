@@ -24,7 +24,9 @@ public class PersonService {
         return personRepository.existsByLogin(login);
     }
 
-    public Optional<Person> getPersonByLogin(String login){ return personRepository.findByLogin(login);}
+    public Optional<Person> getPersonByLogin(String login) {
+        return personRepository.findByLogin(login);
+    }
 
     @Transactional
     public void save(Person person) {
