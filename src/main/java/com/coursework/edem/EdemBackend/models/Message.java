@@ -23,13 +23,20 @@ public class Message {
     private String title;
 
     @Column(name = "message_text")
-    private String message_text;
+    private String messageText;
 
-    public Message(Long receiver_id, Long sender_id, String title, String message_text) {
+    @Column(name = "receiver_login")
+    private String receiverLogin;
+    @Column(name = "sender_login")
+    private String senderLogin;
+
+    public Message(Long receiver_id, Long sender_id, String receiverLogin, String senderLogin, String title, String message_text) {
         this.receiverId = receiver_id;
         this.senderId = sender_id;
         this.title = title;
-        this.message_text = message_text;
+        this.messageText = message_text;
+        this.receiverLogin = receiverLogin;
+        this.senderLogin = senderLogin;
     }
 
     public Message() {

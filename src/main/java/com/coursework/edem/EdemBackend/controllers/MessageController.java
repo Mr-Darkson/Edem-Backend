@@ -64,18 +64,42 @@ public class MessageController {
         model.addAttribute("messages", messages);
         return "account/messages/mailbox";
     }
+    @GetMapping("/sent")
+    public String sent(@AuthenticationPrincipal PersonDetails personDetails, Model model){
+        model.addAttribute("person", personDetails.getPerson());
+        List<Message> messages = messageService.findAllBySenderId(personDetails.getPerson().getId());
+        model.addAttribute("messages", messages);
+        return "account/messages/mailbox";
+    }
+
+    @GetMapping("/currentMessage/{id}")
+    public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id){
+        var message = messageService.findById(id);
+        if (message.isPresent()){
+            if (message.get().getReceiverId() == personDetails.getPerson().getId()){
+                model.addAttribute("Email", message.get().getSenderLogin());
+            }
+            else{
+                model.addAttribute("Email", message.get().getReceiverLogin());
+            }
+            model.addAttribute("Message", message.get());
+            return "account/messages/sms-write";
+        }
+        return "account/messages/mailbox";
+
+    }
 
     @GetMapping("/sendmessage")
     public String sendMessage(Model model) {
         model.addAttribute("filesToUpload", new AvatarFile());
-        return "account/messages/sendmessage";
+        return "OldHTML/sendmessage";
     }
 
     @PostMapping("/sendmessage")
     public String sendMessagePost(@AuthenticationPrincipal PersonDetails personDetails, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
         var messageGetter = personService.getPersonByLogin(login);
         if (messageGetter.isPresent()) {
-            Message message = new Message(messageGetter.get().getId(), personDetails.getPerson().getId(), title, message_text);
+            Message message = new Message(messageGetter.get().getId(), personDetails.getPerson().getId(), messageGetter.get().getLogin(), personDetails.getPerson().getLogin(), title, message_text);
             messageService.save(message);
             fileService.uploadFilesToServer(multipartFile, message.getId());
         }
