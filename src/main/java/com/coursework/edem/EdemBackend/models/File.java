@@ -15,12 +15,12 @@ public class File {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "message_id")
-    private Long message_id;
+    private Long messageId;
     @Column(name = "filename")
     private String filename;
 
-    public File(Long message_id, String filename) {
-        this.message_id = message_id;
+    public File(Long messageId, String filename) {
+        this.messageId = messageId;
         this.filename = filename;
     }
 

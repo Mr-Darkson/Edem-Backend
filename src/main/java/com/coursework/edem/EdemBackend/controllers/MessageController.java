@@ -11,8 +11,6 @@ import com.coursework.edem.EdemBackend.utils.AvatarFileValidator;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +18,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 @Controller
@@ -85,28 +86,8 @@ public class MessageController {
         return "redirect:/service/mailbox";
     }
 
-    @GetMapping("/download")
-    public void downloadFile(HttpServletResponse response) {
-        try {
-            String dirPath = System.getProperty("user.dir") + "/src/main/data/demo.txt";
-
-            response.setContentType("application/octet-stream");
-            response.setHeader("Content-Disposition", "attachment; filename=" + "1.txt");
-
-            InputStream inputStream = new FileInputStream(dirPath);
-            OutputStream outputStream = response.getOutputStream();
-
-            byte[] buffer = new byte[1024];
-            int bytesRead;
-            while ((bytesRead = inputStream.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-
-            inputStream.close();
-            outputStream.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    @GetMapping("/download/{id}")
+    public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
+        fileService.downloadFilesFromServer(id, response);
     }
 }

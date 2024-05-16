@@ -3,10 +3,13 @@ package com.coursework.edem.EdemBackend.services;
 import com.coursework.edem.EdemBackend.models.File;
 import com.coursework.edem.EdemBackend.repositories.FileRepository;
 import com.coursework.edem.EdemBackend.utils.FileUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 
@@ -32,15 +35,16 @@ public class FileService {
             }
         }
     }
-    public byte[] downloadFilesFromServer(String fileName) {
-        String filePath = "C://Users/User/Desktop/edem/Edem-Backend/src/main/data/";
-        // String filePath = "C://edem/Edem-Backend/src/main/data/"; // версия для вас
-        String fileAddress = filePath + fileName;
-        try{
-            return FileUtil.downloadFile(fileAddress);
-        } catch (Exception e){
-            System.out.println("downloadFilesToServer Exception!");
-            return new byte[1];
+
+    public void downloadFilesFromServer(Long messageId, HttpServletResponse response) {
+        List<File> files = fileRepository.findAllByMessageId(messageId);
+
+        for (int i = 0; i < files.size(); i++) {
+            try{
+                FileUtil.downloadFile(files.get(i).getFilename(), response);
+            } catch (IOException e){
+                System.out.println("Error filename!");
+            }
         }
     }
 }
