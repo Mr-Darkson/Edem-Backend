@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 @AllArgsConstructor
-public class FileUploadService {
+public class FileService {
     private final FileRepository fileRepository;
 
     public void uploadFilesToServer(MultipartFile[] multipartFile, Long messageId) {
@@ -30,6 +30,17 @@ public class FileUploadService {
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }
+        }
+    }
+    public byte[] downloadFilesFromServer(String fileName) {
+        String filePath = "C://Users/User/Desktop/edem/Edem-Backend/src/main/data/";
+        // String filePath = "C://edem/Edem-Backend/src/main/data/"; // версия для вас
+        String fileAddress = filePath + fileName;
+        try{
+            return FileUtil.downloadFile(fileAddress);
+        } catch (Exception e){
+            System.out.println("downloadFilesToServer Exception!");
+            return new byte[1];
         }
     }
 }

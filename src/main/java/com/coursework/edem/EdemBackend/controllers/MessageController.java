@@ -3,13 +3,16 @@ package com.coursework.edem.EdemBackend.controllers;
 import com.coursework.edem.EdemBackend.models.AvatarFile;
 import com.coursework.edem.EdemBackend.models.Message;
 import com.coursework.edem.EdemBackend.security.PersonDetails;
-import com.coursework.edem.EdemBackend.services.FileUploadService;
+import com.coursework.edem.EdemBackend.services.FileService;
 import com.coursework.edem.EdemBackend.services.MessageService;
 import com.coursework.edem.EdemBackend.services.PersonService;
 import com.coursework.edem.EdemBackend.util.FileValidator;
 import com.coursework.edem.EdemBackend.utils.AvatarFileValidator;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.util.List;
 
 @Controller
@@ -28,7 +32,7 @@ public class MessageController {
     private final PersonService personService;
     private final AvatarFileValidator avatarFileValidator;
     private final FileValidator fileValidator;
-    private final FileUploadService fileUploadService;
+    private final FileService fileService;
 
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
@@ -64,18 +68,6 @@ public class MessageController {
         return "account/messages/mailbox";
     }
 
-    @GetMapping("/upload")
-    public String uploadFiles(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
-        model.addAttribute("filesToUpload", new AvatarFile());
-        return "account/messages/upload";
-    }
-
-    @PostMapping("/upload")
-    public String uploadFilesPost(Model model, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @AuthenticationPrincipal PersonDetails personDetails) {
-        fileUploadService.uploadFilesToServer(multipartFile, personDetails.getPerson().getId());
-        return "redirect:/service/upload";
-    }
-
     @GetMapping("/sendmessage")
     public String sendMessage(Model model) {
         model.addAttribute("filesToUpload", new AvatarFile());
@@ -88,8 +80,40 @@ public class MessageController {
         if (messageGetter.isPresent()) {
             Message message = new Message(messageGetter.get().getId(), personDetails.getPerson().getId(), title, message_text);
             messageService.save(message);
-            fileUploadService.uploadFilesToServer(multipartFile, message.getId());
+            fileService.uploadFilesToServer(multipartFile, message.getId());
         }
         return "redirect:/service/mailbox";
+    }
+
+    @GetMapping("/download")
+    public void downloadFile(HttpServletResponse response) {
+        try {
+            String dirPath = System.getProperty("user.dir") + "/src/main/data/demo.txt";
+
+            //Resource resource = new ClassPathResource("demo.txt");
+            response.setContentType("application/octet-stream");
+            response.setHeader("Content-Disposition", "attachment; filename=" + ".txt");
+
+
+            InputStream inputStream = new BufferedInputStream(new FileInputStream(dirPath));
+            //InputStream inputStream = resource.getInputStream();
+
+            // Get output stream of the response
+            OutputStream outputStream = response.getOutputStream();
+
+            // Copy input stream to output stream
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            // Close streams
+            inputStream.close();
+            outputStream.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

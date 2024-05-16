@@ -1,7 +1,7 @@
 package com.coursework.edem.EdemBackend.utils;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
+import java.nio.file.Files;
 
 public class FileUtil {
     // Инструменты для загрузки файлов
@@ -14,5 +14,10 @@ public class FileUtil {
         out.write(file);
         out.flush();
         out.close();
+    }
+
+    public static byte[] downloadFile(String path) throws IOException {
+        FileInputStream in = new FileInputStream(path);
+        return in.readAllBytes();
     }
 }
