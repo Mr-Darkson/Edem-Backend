@@ -75,7 +75,7 @@ public class MessageController {
         model.addAttribute("filesToUpload", new AvatarFile());
         return "account/messages/upload";
     }
-    @PatchMapping("/upload")
+    @PostMapping("/upload")
     public String uploadFilesPost(Model model, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @AuthenticationPrincipal PersonDetails personDetails){
         fileUploadService.uploadFilesToServer(multipartFile, personDetails.getPerson().getId());
         return "redirect:/service/upload";
@@ -83,15 +83,17 @@ public class MessageController {
 
     @GetMapping("/sendmessage")
     public String sendMessage(Model model) {
+        model.addAttribute("filesToUpload", new AvatarFile());
         return "account/messages/sendmessage";
     }
 
     @PostMapping("/sendmessage")
-    public String sendMessagePost(@AuthenticationPrincipal PersonDetails personDetails, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
+    public String sendMessagePost(@AuthenticationPrincipal PersonDetails personDetails,@ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
         var messageGetter = personService.getPersonByLogin(login);
         if (messageGetter.isPresent()){
             Message message = new Message(messageGetter.get().getId(), personDetails.getPerson().getId(), title, message_text);
             messageService.save(message);
+            fileUploadService.uploadFilesToServer(multipartFile, message.getId());
         }
         return "redirect:/service/mailbox";
     }

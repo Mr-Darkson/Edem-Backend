@@ -8,10 +8,11 @@
 <body>
 <div class = "container mt-5 mb-5">
     <h1>Отправить письмо</h1>
-    <form action="/service/sendmessage" method="post">
+    <form action="/service/sendmessage" method="post" th:object="${filesToUpload}" enctype="multipart/form-data">
         <input type="text" name = "login" placeholder="Введите login получателя" class="form-control"><br>
         <input type="text" name = "title" placeholder="Введите заголовок письма" class="form-control"><br>
         <textarea name = "message_text" placeholder="Введите текст" class="form-control"></textarea><br>
+        <input type="file" th:field="*{multipartFile}" id="multipartFile" multiple>
         <button type = "submit" class="btn btn-success">Отправить письмо</button>
     </form>
 </div>
