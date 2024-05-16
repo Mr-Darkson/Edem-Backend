@@ -37,7 +37,7 @@ public class AuthController {
     @PostMapping("/registration")
     public String register(@ModelAttribute("person") Person person, BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
-        if(bindingResult.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "authorization/registration_page";
         }
         person.setPassword(passwordEncoder.encode(person.getPassword()));

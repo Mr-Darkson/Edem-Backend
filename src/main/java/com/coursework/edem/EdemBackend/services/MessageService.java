@@ -14,11 +14,17 @@ public class MessageService {
 
     private final MessageRepository messageRepository;
 
-    public List<Message> findAllByReceiverId(Long id) { return messageRepository.findAllByReceiverId(id);}
+    public List<Message> findAllByReceiverId(Long id) {
+        return messageRepository.findAllByReceiverId(id);
+    }
 
-    public List<Message> findAllBySenderId(Long id) { return messageRepository.findAllByReceiverId(id); }
+    public List<Message> findAllBySenderId(Long id) {
+        return messageRepository.findAllByReceiverId(id);
+    }
 
     @Transactional
-    public void save(Message message) { messageRepository.save(message);}
+    public void save(Message message) {
+        messageRepository.save(message);
+    }
 
 }

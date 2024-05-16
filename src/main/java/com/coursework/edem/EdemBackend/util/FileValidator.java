@@ -1,6 +1,5 @@
 package com.coursework.edem.EdemBackend.util;
 
-import com.coursework.edem.EdemBackend.models.AvatarFile;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;

@@ -3,16 +3,15 @@ package com.coursework.edem.EdemBackend.utils;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.*;
-import java.nio.file.Files;
 
 public class FileUtil {
     // Инструменты для загрузки файлов
     public static void uploadFile(byte[] file, String filePath, String fileName) throws Exception {
         File targetFile = new File(filePath);
-        if(!targetFile.exists()){
+        if (!targetFile.exists()) {
             targetFile.mkdirs();
         }
-        FileOutputStream out = new FileOutputStream(filePath+fileName);
+        FileOutputStream out = new FileOutputStream(filePath + fileName);
         out.write(file);
         out.flush();
         out.close();

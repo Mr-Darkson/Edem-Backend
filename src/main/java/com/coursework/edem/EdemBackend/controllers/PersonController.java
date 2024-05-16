@@ -1,17 +1,13 @@
 package com.coursework.edem.EdemBackend.controllers;
 
 import com.coursework.edem.EdemBackend.models.Person;
-import com.coursework.edem.EdemBackend.repositories.PersonRepository;
 import com.coursework.edem.EdemBackend.services.PersonService;
 import com.coursework.edem.EdemBackend.utils.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.HashMap;
 
 @Controller
 public class PersonController {

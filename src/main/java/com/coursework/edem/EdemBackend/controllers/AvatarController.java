@@ -1,19 +1,18 @@
 package com.coursework.edem.EdemBackend.controllers;
 
 
-import com.coursework.edem.EdemBackend.models.Avatar;
-import com.coursework.edem.EdemBackend.repositories.AvatarRepository;
 import com.coursework.edem.EdemBackend.services.AvatarService;
 import lombok.AllArgsConstructor;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.*;
-import java.util.Optional;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 @RestController
 @AllArgsConstructor

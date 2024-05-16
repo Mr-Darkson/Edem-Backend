@@ -11,6 +11,7 @@ import org.springframework.validation.Validator;
 @Component
 public class PersonValidator implements Validator {
     private final PersonService personService;
+
     @Override
     public boolean supports(Class<?> clazz) {
         return Person.class.equals(clazz);
@@ -19,14 +20,14 @@ public class PersonValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
-        if(!hasCorrectLogin(person)) {
+        if (!hasCorrectLogin(person)) {
             errors
                     .rejectValue("login", " ",
                             "Имя должно быть длинной от 3 до 30 символов," +
                                     " а так же может содержать только заглавные/строчные латинские буквы" +
                                     " и символы -, _,(, ).");
         }
-        if(personService.hasAnyWithLogin(person.getLogin())) {
+        if (personService.hasAnyWithLogin(person.getLogin())) {
             errors
                     .rejectValue("login", " ",
                             "Данное имя пользователя занято.");
@@ -34,10 +35,10 @@ public class PersonValidator implements Validator {
 
     }
 
-    private static boolean hasCorrectLogin(Person person){
+    private static boolean hasCorrectLogin(Person person) {
         String login = person.getLogin();
-        if(login.length() >= 3 && login.length() <= 30) {
-            if(login.matches("^[a-zA-Z0-9-_)(]*$")) {
+        if (login.length() >= 3 && login.length() <= 30) {
+            if (login.matches("^[a-zA-Z0-9-_)(]*$")) {
                 return true;
             }
         }
