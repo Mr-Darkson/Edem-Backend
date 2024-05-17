@@ -62,7 +62,7 @@ public class MessageController {
             return "account/messages/profile";
         }
 
-        personService.updatePerson(personDetails.getPerson().getId(), personProfileData.getAvatarFile(), personProfileData.getUsername());
+        personService.updatePerson(personDetails.getPerson().getId(), personProfileData);
         return "redirect:/service/profile";
     }
 
