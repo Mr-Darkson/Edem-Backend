@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface FileRepository extends JpaRepository<File, Long> {
     Optional<File> findByFilename(String filename);
 
-    List<File> findAllByMessageId(Long messageId);
+    Optional<File> findByMessageId(Long messageId);
 }
