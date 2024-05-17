@@ -71,6 +71,7 @@ public class MessageController {
         model.addAttribute("person", personDetails.getPerson());
         List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId());
         model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
         return "account/messages/mailbox";
     }
     @GetMapping("/sent")
@@ -104,7 +105,7 @@ public class MessageController {
         return "OldHTML/sendmessage";
     }
 
-    @PostMapping("/sendmessage")
+    @PostMapping("/mailbox") // sendmessage
     public String sendMessagePost(@AuthenticationPrincipal PersonDetails personDetails, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
         var messageGetter = personService.getPersonByLogin(login);
         if (messageGetter.isPresent()) {
