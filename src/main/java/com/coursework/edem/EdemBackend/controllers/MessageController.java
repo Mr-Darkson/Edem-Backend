@@ -69,40 +69,10 @@ public class MessageController {
     @GetMapping("/mailbox")
     public String mailbox(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
-        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId());
+        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
         model.addAttribute("messages", messages);
         model.addAttribute("filesToUpload", new AvatarFile());
         return "account/messages/mailbox";
-    }
-    @GetMapping("/sent")
-    public String sent(@AuthenticationPrincipal PersonDetails personDetails, Model model){
-        model.addAttribute("person", personDetails.getPerson());
-        List<Message> messages = messageService.findAllBySenderId(personDetails.getPerson().getId());
-        model.addAttribute("messages", messages);
-        return "account/messages/mailbox";
-    }
-
-    @GetMapping("/currentMessage/{id}")
-    public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id){
-        var message = messageService.findById(id);
-        if (message.isPresent()){
-            if (message.get().getReceiverId() == personDetails.getPerson().getId()){
-                model.addAttribute("Email", message.get().getSenderLogin());
-            }
-            else{
-                model.addAttribute("Email", message.get().getReceiverLogin());
-            }
-            model.addAttribute("Message", message.get());
-            return "account/messages/sms-write";
-        }
-        return "account/messages/mailbox";
-
-    }
-
-    @GetMapping("/sendmessage")
-    public String sendMessage(Model model) {
-        model.addAttribute("filesToUpload", new AvatarFile());
-        return "OldHTML/sendmessage";
     }
 
     @PostMapping("/mailbox") // sendmessage
@@ -114,6 +84,30 @@ public class MessageController {
             fileService.uploadFilesToServer(multipartFile, message.getId());
         }
         return "redirect:/service/mailbox";
+    }
+
+    @GetMapping("/sent")
+    public String sent(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
+        model.addAttribute("person", personDetails.getPerson());
+        List<Message> messages = messageService.findAllBySenderId(personDetails.getPerson().getId()).reversed();
+        model.addAttribute("messages", messages);
+        return "account/messages/sent";
+    }
+
+    @GetMapping("/currentMessage/{id}")
+    public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
+        var message = messageService.findById(id);
+        if (message.isPresent()) {
+            if (message.get().getReceiverId() == personDetails.getPerson().getId()) {
+                model.addAttribute("Email", message.get().getSenderLogin());
+            } else {
+                model.addAttribute("Email", message.get().getReceiverLogin());
+            }
+            model.addAttribute("Message", message.get());
+            return "account/messages/sms-write";
+        }
+        return "account/messages/mailbox";
+
     }
 
     @GetMapping("/download/{id}")
