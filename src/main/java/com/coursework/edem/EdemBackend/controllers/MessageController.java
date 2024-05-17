@@ -2,12 +2,14 @@ package com.coursework.edem.EdemBackend.controllers;
 
 import com.coursework.edem.EdemBackend.models.AvatarFile;
 import com.coursework.edem.EdemBackend.models.Message;
+import com.coursework.edem.EdemBackend.models.Person;
+import com.coursework.edem.EdemBackend.models.PersonProfileData;
 import com.coursework.edem.EdemBackend.security.PersonDetails;
 import com.coursework.edem.EdemBackend.services.FileService;
 import com.coursework.edem.EdemBackend.services.MessageService;
 import com.coursework.edem.EdemBackend.services.PersonService;
 import com.coursework.edem.EdemBackend.util.FileValidator;
-import com.coursework.edem.EdemBackend.utils.AvatarFileValidator;
+import com.coursework.edem.EdemBackend.utils.PersonProfileDataValidator;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -27,33 +29,40 @@ public class MessageController {
 
     private final MessageService messageService;
     private final PersonService personService;
-    private final AvatarFileValidator avatarFileValidator;
+    private final PersonProfileDataValidator personProfileDataValidator;
     private final FileValidator fileValidator;
     private final FileService fileService;
 
     @GetMapping("/profile")
     public String profile(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
+        Person person = personService.getPersonById(personDetails.getPerson().getId());
+        PersonProfileData personProfileData = new PersonProfileData();
+        personProfileData.setUsername(person.getUsername());
+        //пароль не передаём в форму в целях безопасности
+
+        System.out.println(System.getProperty("user.dir"));
+
         model.addAttribute("person", personDetails.getPerson());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
-        model.addAttribute("avatarFile", new AvatarFile());
+        model.addAttribute("personProfileData", personProfileData);
+
         return "account/messages/profile";
     }
 
     @PatchMapping("/profile")
-    public String updatePersonData(@AuthenticationPrincipal PersonDetails personDetails, Model model, @ModelAttribute("avatarFile") @Valid AvatarFile avatarFile, BindingResult bindingResult, @RequestParam("nickname") String nickname) {
-        if (!avatarFile.getMultipartFile().isEmpty()) {
-            avatarFileValidator.validate(avatarFile, bindingResult);
+    public String updatePersonData(@AuthenticationPrincipal PersonDetails personDetails, Model model, @ModelAttribute("personProfileData") @Valid PersonProfileData personProfileData, BindingResult bindingResult) {
+        if (!personProfileData.getAvatarFile().isEmpty()) {
+            personProfileDataValidator.validate(personProfileData, bindingResult);
         }
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("person", personDetails.getPerson());
             model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
 
-            System.out.println("Файл не является изображением");
-
             return "account/messages/profile";
         }
-        personService.updatePerson(personDetails.getPerson().getId(), avatarFile.getMultipartFile(), nickname);
+
+        personService.updatePerson(personDetails.getPerson().getId(), personProfileData.getAvatarFile(), personProfileData.getUsername());
         return "redirect:/service/profile";
     }
 
