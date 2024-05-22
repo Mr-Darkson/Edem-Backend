@@ -94,6 +94,10 @@ public class MessageController {
         return "account/messages/sent";
     }
 
+    @GetMapping("/bin")
+    public String bin(){
+        return "account/messages/bin";
+    }
     @GetMapping("/message/{id}")
     public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
