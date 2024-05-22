@@ -20,7 +20,7 @@ public class MessageService {
     }
 
     public List<Message> findAllBySenderId(Long id) {
-        return messageRepository.findAllByReceiverId(id);
+        return messageRepository.findAllBySenderId(id);
     }
 
     public Optional<Message> findById(Long id) {

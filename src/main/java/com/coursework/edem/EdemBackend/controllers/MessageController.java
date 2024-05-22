@@ -94,7 +94,7 @@ public class MessageController {
         return "account/messages/sent";
     }
 
-    @GetMapping("/currentMessage/{id}")
+    @GetMapping("/message/{id}")
     public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
         if (message.isPresent()) {
