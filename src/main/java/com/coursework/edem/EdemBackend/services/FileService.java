@@ -43,4 +43,9 @@ public class FileService {
             }
         }
     }
+
+    public boolean isAnyFiles(Long messageId){
+        Optional<File> files = fileRepository.findByMessageId(messageId);
+        return files.isPresent();
+    }
 }

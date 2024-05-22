@@ -107,6 +107,7 @@ public class MessageController {
             } else {
                 model.addAttribute("Email", message.get().getReceiverLogin());
             }
+            model.addAttribute("Flag", fileService.isAnyFiles(id));
             model.addAttribute("Message", message.get());
             return "account/messages/sms-write";
         }
