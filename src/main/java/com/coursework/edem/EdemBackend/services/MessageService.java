@@ -26,6 +26,7 @@ public class MessageService {
     public Optional<Message> findById(Long id) {
         return messageRepository.findById(id);
     }
+
     @Transactional
     public void save(Message message) {
         messageRepository.save(message);
