@@ -109,9 +109,11 @@ public class MessageController {
             }
             model.addAttribute("Flag", fileService.isAnyFiles(id));
             model.addAttribute("Message", message.get());
+            model.addAttribute("filesToUpload", new AvatarFile());
+            model.addAttribute("person", personDetails.getPerson());
             return "account/messages/sms-write";
         }
-        return "account/messages/mailbox";
+        return "redirect:/service/mailbox";
 
     }
 
