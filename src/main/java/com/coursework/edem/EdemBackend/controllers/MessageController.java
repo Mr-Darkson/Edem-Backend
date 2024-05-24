@@ -117,8 +117,20 @@ public class MessageController {
 
     }
 
+    @PostMapping("/message/{id}") // sendmessage
+    public String currentMessagePost(@AuthenticationPrincipal PersonDetails personDetails, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
+        var messageGetter = personService.getPersonByLogin(login);
+        if (messageGetter.isPresent()) {
+            Message message = new Message(messageGetter.get().getId(), personDetails.getPerson().getId(), messageGetter.get().getLogin(), personDetails.getPerson().getLogin(), title, message_text);
+            messageService.save(message);
+            fileService.uploadFilesToServer(multipartFile, message.getId());
+        }
+        return "redirect:/service/message/{id}";
+    }
+
     @GetMapping("/download/{id}")
     public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         fileService.downloadFilesFromServer(id, response);
     }
+
 }
