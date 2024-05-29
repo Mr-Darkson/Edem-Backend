@@ -40,8 +40,6 @@ public class MessageController {
         personProfileData.setUsername(person.getUsername());
         //пароль не передаём в форму в целях безопасности
 
-        System.out.println(System.getProperty("user.dir"));
-
         model.addAttribute("person", personDetails.getPerson());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         model.addAttribute("personProfileData", personProfileData);
@@ -72,6 +70,7 @@ public class MessageController {
         List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
         model.addAttribute("messages", messages);
         model.addAttribute("filesToUpload", new AvatarFile());
+        model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/mailbox";
     }
 
@@ -91,13 +90,17 @@ public class MessageController {
         model.addAttribute("person", personDetails.getPerson());
         List<Message> messages = messageService.findAllBySenderId(personDetails.getPerson().getId()).reversed();
         model.addAttribute("messages", messages);
+        model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/sent";
     }
 
     @GetMapping("/bin")
-    public String bin(){
+    public String bin(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
+        model.addAttribute("person", personDetails.getPerson());
+        model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/bin";
     }
+
     @GetMapping("/message/{id}")
     public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
@@ -111,6 +114,7 @@ public class MessageController {
             model.addAttribute("Message", message.get());
             model.addAttribute("filesToUpload", new AvatarFile());
             model.addAttribute("person", personDetails.getPerson());
+            model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
             return "account/messages/sms-write";
         }
         return "redirect:/service/mailbox";
