@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -77,6 +78,7 @@ public class PersonService {
     @Transactional(readOnly = false)
     public void updatePerson(Long id, PersonProfileData personProfileData) {
         Person person = getPersonById(id);
+
         String newUsername = personProfileData.getUsername();
         MultipartFile newAvatar = personProfileData.getAvatarFile();
         String newPassword = personProfileData.getPassword();
@@ -86,8 +88,10 @@ public class PersonService {
         }
 
         if (!newAvatar.isEmpty()) {
-            String fileName = newAvatar.getOriginalFilename();
+            String uuidFile = UUID.randomUUID().toString();
+            String fileName = uuidFile + "." + newAvatar.getOriginalFilename();
             String filePath = System.getProperty("user.dir") + "/src/main/avatars/";
+
             try {
                 FileUtil.uploadFile(newAvatar.getBytes(), filePath, fileName);
 
