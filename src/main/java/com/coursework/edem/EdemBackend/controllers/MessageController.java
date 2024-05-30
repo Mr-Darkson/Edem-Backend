@@ -74,6 +74,25 @@ public class MessageController {
         return "account/messages/mailbox";
     }
 
+    @PostMapping("/mailbox/search")
+    public String searchMailbox(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
+        if (!(searchText == null) || !(searchText.isEmpty())) {
+            model.addAttribute("person", personDetails.getPerson());
+            List<Message> messages = messageService.searchMailboxByMessageText(searchText, personDetails.getPerson().getId());
+            model.addAttribute("messages", messages);
+            model.addAttribute("filesToUpload", new AvatarFile());
+            model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
+            return "account/messages/mailbox";
+        }
+
+        model.addAttribute("person", personDetails.getPerson());
+        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
+        model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
+        model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
+        return "account/messages/mailbox";
+    }
+
     @PostMapping("/mailbox") // sendmessage
     public String sendMessagePost(@AuthenticationPrincipal PersonDetails personDetails, @ModelAttribute("filesToUpload") MultipartFile[] multipartFile, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, Model model) {
         var messageGetter = personService.getPersonByLogin(login);
@@ -94,9 +113,47 @@ public class MessageController {
         return "account/messages/sent";
     }
 
+    @PostMapping("/sent/search")
+    public String searchSent(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
+        if (!(searchText == null) || !(searchText.isEmpty())) {
+            model.addAttribute("person", personDetails.getPerson());
+            List<Message> messages = messageService.searchSentByMessageText(searchText, personDetails.getPerson().getId());
+            model.addAttribute("messages", messages);
+            model.addAttribute("filesToUpload", new AvatarFile());
+            model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
+            return "account/messages/sent";
+        }
+
+        model.addAttribute("person", personDetails.getPerson());
+        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
+        model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
+        model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
+        return "account/messages/sent";
+    }
+
     @GetMapping("/bin")
     public String bin(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
+        model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
+        return "account/messages/bin";
+    }
+
+    @PostMapping("/bin/search")
+    public String searchBin(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
+        if (!(searchText == null) || !(searchText.isEmpty())) {
+            model.addAttribute("person", personDetails.getPerson());
+            List<Message> messages = messageService.searchBinByMessageText(searchText, personDetails.getPerson().getId());
+            model.addAttribute("messages", messages);
+            model.addAttribute("filesToUpload", new AvatarFile());
+            model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
+            return "account/messages/bin";
+        }
+
+        model.addAttribute("person", personDetails.getPerson());
+        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
+        model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/bin";
     }
