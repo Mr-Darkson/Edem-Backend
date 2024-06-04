@@ -20,12 +20,25 @@ public class MessageService {
     }
 
     public List<Message> findAllBySenderId(Long id) {
-        return messageRepository.findAllByReceiverId(id);
+        return messageRepository.findAllBySenderId(id);
     }
 
     public Optional<Message> findById(Long id) {
         return messageRepository.findById(id);
     }
+
+    public List<Message> searchMailboxByMessageText(String searchText, Long id) {
+        return messageRepository.findByMessageTextContainingAndReceiverId(searchText, id);
+    }
+
+    public List<Message> searchSentByMessageText(String searchText, Long id) {
+        return messageRepository.findByMessageTextContainingAndSenderId(searchText, id);
+    }
+
+    public List<Message> searchBinByMessageText(String searchText, Long id) {
+        return messageRepository.findByMessageTextContainingAndSenderIdOrReceiverId(searchText, id, id);
+    }
+
     @Transactional
     public void save(Message message) {
         messageRepository.save(message);

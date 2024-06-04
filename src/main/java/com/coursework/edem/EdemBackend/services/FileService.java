@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -20,31 +20,32 @@ public class FileService {
 
     public void uploadFilesToServer(MultipartFile[] multipartFile, Long messageId) {
         String filePath = System.getProperty("user.dir") + "/src/main/data/";
-        // String filePath = "C://edem/Edem-Backend/src/main/data/"; // версия для вас
         if (multipartFile.length == 1 && multipartFile[0].isEmpty()) return;
-        for (int i = 0; i < multipartFile.length; i++) {
-            String fileName = UUID.randomUUID().toString() + multipartFile[i].getOriginalFilename();
-            while (fileRepository.findByFilename(fileName).isPresent()) {
-                fileName = UUID.randomUUID().toString() + multipartFile[i].getOriginalFilename();
-            }
-            try {
-                FileUtil.uploadFile(multipartFile[i].getBytes(), filePath, fileName);
-                fileRepository.save(new File(messageId, fileName));
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
+        String fileName = UUID.randomUUID().toString() + ".zip";
+        while (fileRepository.findByFilename(fileName).isPresent()) {
+            fileName = UUID.randomUUID().toString() + ".zip";
+        }
+        try {
+            FileUtil.uploadMutlipleFiles(multipartFile, filePath, fileName);
+            fileRepository.save(new File(messageId, fileName));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     public void downloadFilesFromServer(Long messageId, HttpServletResponse response) {
-        List<File> files = fileRepository.findAllByMessageId(messageId);
-
-        for (int i = 0; i < files.size(); i++) {
+        Optional<File> files = fileRepository.findByMessageId(messageId);
+        if (files.isPresent()) {
             try {
-                FileUtil.downloadFile(files.get(i).getFilename(), response);
+                FileUtil.downloadFile(files.get().getFilename(), response);
             } catch (IOException e) {
                 System.out.println("Error filename!");
             }
         }
+    }
+
+    public boolean isAnyFiles(Long messageId){
+        Optional<File> files = fileRepository.findByMessageId(messageId);
+        return files.isPresent();
     }
 }

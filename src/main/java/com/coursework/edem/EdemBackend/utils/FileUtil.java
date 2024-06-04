@@ -1,8 +1,11 @@
 package com.coursework.edem.EdemBackend.utils;
 
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class FileUtil {
     // Инструменты для загрузки файлов
@@ -15,6 +18,17 @@ public class FileUtil {
         out.write(file);
         out.flush();
         out.close();
+    }
+
+    public static void uploadMutlipleFiles(MultipartFile[] multipartFile, String filePath, String fileName) throws IOException {
+        ZipOutputStream archive = new ZipOutputStream(new FileOutputStream(filePath + fileName));
+        for (int i = 0; i < multipartFile.length; i++) {
+            ZipEntry file = new ZipEntry(multipartFile[i].getOriginalFilename());
+            archive.putNextEntry(file);
+            archive.write(multipartFile[i].getBytes());
+            archive.closeEntry();
+        }
+        archive.close();
     }
 
     public static void downloadFile(String name, HttpServletResponse response) throws IOException {
