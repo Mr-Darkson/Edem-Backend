@@ -19,7 +19,7 @@ public class FileService {
     private final FileRepository fileRepository;
 
     public void uploadFilesToServer(MultipartFile[] multipartFile, Long messageId) {
-        String filePath = "C://Users/User/Desktop/edem/Edem-Backend/src/main/data/";
+        String filePath = System.getProperty("user.dir") + "/src/main/data/";
         // String filePath = "C://edem/Edem-Backend/src/main/data/"; // версия для вас
         if (multipartFile.length == 1 && multipartFile[0].isEmpty()) return;
         for (int i = 0; i < multipartFile.length; i++) {

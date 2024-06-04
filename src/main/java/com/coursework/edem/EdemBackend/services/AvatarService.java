@@ -22,7 +22,7 @@ public class AvatarService {
         Person person = personRepository.findById(id).orElse(null);
         Avatar avatar = avatarRepository.findAvatarByPerson(person).orElse(null);
 
-        String filePath = "C://edem/Edem-Backend/src/main/";
+        String filePath = System.getProperty("user.dir") + "/src/main/";
         if (avatar == null) {
             filePath = filePath + "resources/static/img/sms/Ellipse.png";
         } else {

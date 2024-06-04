@@ -29,11 +29,6 @@ public class AuthController {
         return "authorization/login_page";
     }
 
-    @GetMapping("/registration")
-    public String registrationPage(@ModelAttribute("person") Person person) {
-        return "authorization/registration_page";
-    }
-
     @PostMapping("/registration")
     public String register(@ModelAttribute("person") Person person, BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
