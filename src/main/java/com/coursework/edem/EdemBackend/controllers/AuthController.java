@@ -27,6 +27,11 @@ public class AuthController {
         model.addAttribute("error", error != null);
         model.addAttribute("logout", logout != null);
         return "authorization/login_page";
+
+    }
+    @GetMapping("/registration")
+    public String registrationPage(@ModelAttribute("person") Person person) {
+        return "authorization/registration_page";
     }
 
     @PostMapping("/registration")

@@ -25,6 +25,8 @@ public class PersonController {
         return "profile/show";
     }
 
+
+
     @GetMapping("profile/new")
     public String newProfile(@ModelAttribute("person") Person person) {
         return "profile/new";

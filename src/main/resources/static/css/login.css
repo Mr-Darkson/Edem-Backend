@@ -1,0 +1,13 @@
+.login__logout
+{
+    text-decoration: none;
+    color: #15ea9e;
+    display: block;
+    font-size: 15px;
+    letter-spacing: 3px;
+    margin: auto;
+    text-align: center;
+}
+.login__logout {
+    font-size: 17px;
+}
