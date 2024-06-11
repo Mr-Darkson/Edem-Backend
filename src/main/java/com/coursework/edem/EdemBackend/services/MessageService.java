@@ -28,11 +28,11 @@ public class MessageService {
     }
 
     public List<Message> searchMailboxByMessageText(String searchText, Long id) {
-        return messageRepository.findByMessageTextContainingAndReceiverId(searchText, id);
+        return messageRepository.findAllByMessageTextContainingAndReceiverIdOrTitleContainingAndReceiverIdOrSenderLoginContainingAndReceiverId(searchText, id, searchText, id, searchText, id);
     }
 
     public List<Message> searchSentByMessageText(String searchText, Long id) {
-        return messageRepository.findByMessageTextContainingAndSenderId(searchText, id);
+        return messageRepository.findAllByMessageTextContainingAndSenderIdOrTitleContainingAndSenderIdOrReceiverLoginContainingAndSenderId(searchText, id, searchText, id, searchText, id);
     }
 
     public List<Message> searchBinByMessageText(String searchText, Long id) {

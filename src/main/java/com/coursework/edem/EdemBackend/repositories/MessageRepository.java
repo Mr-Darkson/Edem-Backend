@@ -15,9 +15,12 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findAllByReceiverId(Long receiverId);
 
-    List<Message> findByMessageTextContainingAndReceiverId(String searchText, Long receiverId);
+    // поиск по входящим
+    List<Message> findAllByMessageTextContainingAndReceiverIdOrTitleContainingAndReceiverIdOrSenderLoginContainingAndReceiverId(String searchText1, Long receiverId1, String searchText2, Long receiverId2, String searchText3, Long receiverId3);
 
-    List<Message> findByMessageTextContainingAndSenderId(String searchText, Long receiverId);
+    // поиск по отправленным
+    List<Message> findAllByMessageTextContainingAndSenderIdOrTitleContainingAndSenderIdOrReceiverLoginContainingAndSenderId(String searchText1, Long senderId1, String searchText2, Long senderId2, String searchText3, Long senderId3);
 
+    // поиск по корзине
     List<Message> findByMessageTextContainingAndSenderIdOrReceiverId(String searchText, Long senderId, Long receiverId);
 }
