@@ -215,13 +215,29 @@ public class MessageController {
             if (message.get().getSenderId() == personDetails.getPerson().getId()) {
                 messageService.delete(currMessage);
             } else {
-                currMessage.setIsInBin(1L);
-                messageService.save(currMessage);
+                if (currMessage.getIsInBin() == 1L){
+                    messageService.delete(currMessage);
+                }
+                else{
+                    currMessage.setIsInBin(1L);
+                    messageService.save(currMessage);
+                }
             }
         }
         return "redirect:/service/mailbox";
     }
 
+    @GetMapping("/restore/{id}")
+    public void restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id){
+        var message = messageService.findById(id);
+        if (message.isPresent()){
+            var currMessage = message.get();
+            if (currMessage.getReceiverId() == personDetails.getPerson().getId()){
+                currMessage.setIsInBin(0L);
+                messageService.save(currMessage);
+            }
+        }
+    }
     @GetMapping("/download/{id}")
     public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         fileService.downloadFilesFromServer(id, response);
