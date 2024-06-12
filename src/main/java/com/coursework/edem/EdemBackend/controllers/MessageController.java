@@ -47,6 +47,21 @@ public class MessageController {
         return "account/messages/profile";
     }
 
+    //NEW FO NKULBAKA
+    @GetMapping("/profile/change")
+    public String changeProfile(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
+        Person person = personService.getPersonById(personDetails.getPerson().getId());
+        PersonProfileData personProfileData = new PersonProfileData();
+        personProfileData.setUsername(person.getUsername());
+
+        model.addAttribute("person", personDetails.getPerson());
+        model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
+        model.addAttribute("personProfileData", personProfileData);
+        return "account/messages/change";
+    }
+
+    //
+
     @PatchMapping("/profile")
     public String updatePersonData(@AuthenticationPrincipal PersonDetails personDetails, Model model, @ModelAttribute("personProfileData") @Valid PersonProfileData personProfileData, BindingResult bindingResult) {
         if (!personProfileData.getAvatarFile().isEmpty()) {
@@ -135,6 +150,9 @@ public class MessageController {
     @GetMapping("/bin")
     public String bin(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
+        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
+        model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/bin";
     }
