@@ -29,6 +29,8 @@ public class Message {
     private String receiverLogin;
     @Column(name = "sender_login")
     private String senderLogin;
+    @Column(name = "is_in_bin")
+    private Long isInBin;
 
     public Message(Long receiver_id, Long sender_id, String receiverLogin, String senderLogin, String title, String message_text) {
         this.receiverId = receiver_id;
@@ -37,6 +39,7 @@ public class Message {
         this.messageText = message_text;
         this.receiverLogin = receiverLogin;
         this.senderLogin = senderLogin;
+        this.isInBin = 0L;
     }
 
     public Message() {

@@ -150,6 +150,9 @@ public class MessageController {
     @GetMapping("/bin")
     public String bin(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
+        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
+        model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/bin";
     }
@@ -204,6 +207,37 @@ public class MessageController {
         return "redirect:/service/message/{id}";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteMessage(@AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
+        var message = messageService.findById(id);
+        if (message.isPresent()) {
+            var currMessage = message.get();
+            if (message.get().getSenderId() == personDetails.getPerson().getId()) {
+                messageService.delete(currMessage);
+            } else {
+                if (currMessage.getIsInBin() == 1L){
+                    messageService.delete(currMessage);
+                }
+                else{
+                    currMessage.setIsInBin(1L);
+                    messageService.save(currMessage);
+                }
+            }
+        }
+        return "redirect:/service/mailbox";
+    }
+
+    @GetMapping("/restore/{id}")
+    public void restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id){
+        var message = messageService.findById(id);
+        if (message.isPresent()){
+            var currMessage = message.get();
+            if (currMessage.getReceiverId() == personDetails.getPerson().getId()){
+                currMessage.setIsInBin(0L);
+                messageService.save(currMessage);
+            }
+        }
+    }
     @GetMapping("/download/{id}")
     public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         fileService.downloadFilesFromServer(id, response);
