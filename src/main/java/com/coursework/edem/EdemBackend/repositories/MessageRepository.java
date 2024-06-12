@@ -25,4 +25,5 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     List<Message> findByMessageTextContainingAndSenderIdOrReceiverId(String searchText, Long senderId, Long receiverId);
 
     // Здесь нужен запрос аля findAllByReceiverId Where IsInBin==1
+    List<Message> findAllByReceiverIdAndIsInBin(Long receiverId, Long isinBin); // единицу нужно класть в метод вручную при его вызове
 }
