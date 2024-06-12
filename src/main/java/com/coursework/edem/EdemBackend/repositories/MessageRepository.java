@@ -23,4 +23,6 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     // поиск по корзине
     List<Message> findByMessageTextContainingAndSenderIdOrReceiverId(String searchText, Long senderId, Long receiverId);
+
+    // Здесь нужен запрос аля findAllByReceiverId Where IsInBin==1
 }

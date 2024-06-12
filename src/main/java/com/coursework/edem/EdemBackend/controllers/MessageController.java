@@ -207,6 +207,21 @@ public class MessageController {
         return "redirect:/service/message/{id}";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteMessage(@AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
+        var message = messageService.findById(id);
+        if (message.isPresent()) {
+            var currMessage = message.get();
+            if (message.get().getSenderId() == personDetails.getPerson().getId()) {
+                messageService.delete(currMessage);
+            } else {
+                currMessage.setIsInBin(1L);
+                messageService.save(currMessage);
+            }
+        }
+        return "redirect:/service/mailbox";
+    }
+
     @GetMapping("/download/{id}")
     public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         fileService.downloadFilesFromServer(id, response);

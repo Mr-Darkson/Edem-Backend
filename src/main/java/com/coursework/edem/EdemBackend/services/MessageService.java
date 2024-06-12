@@ -44,4 +44,7 @@ public class MessageService {
         messageRepository.save(message);
     }
 
+    public void delete(Message message) {
+        messageRepository.delete(message);
+    }
 }
