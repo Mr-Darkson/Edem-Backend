@@ -124,9 +124,13 @@ public class MessageController {
         model.addAttribute("person", personDetails.getPerson());
         List<Message> messages = messageService.findSentMessages(personDetails.getPerson().getId()).reversed();
         model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/sent";
     }
+
+
+
 
     @PostMapping("/sent/search")
     public String searchSent(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
@@ -180,11 +184,6 @@ public class MessageController {
     public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
         if (message.isPresent()) {
-//            if (message.get().getReceiverId() == personDetails.getPerson().getId()) {
-//                model.addAttribute("Email", message.get().getSenderLogin());
-//            } else {
-//                model.addAttribute("Email", message.get().getReceiverLogin());
-//            }
             model.addAttribute("Flag", fileService.isAnyFiles(id));
             model.addAttribute("Message", message.get());
             model.addAttribute("filesToUpload", new AvatarFile());
