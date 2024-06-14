@@ -45,16 +45,25 @@ public class MessageService {
         return messages;
     }
 
-    public List<Message> searchMailboxByMessageText(String searchText, Long id) {
-        return messageRepository.findAllByMessageTextContainingAndReceiverIdOrTitleContainingAndReceiverIdOrSenderLoginContainingAndReceiverId(searchText, id, searchText, id, searchText, id);
+    public List<Message> searchMailboxByMessageText(String searchText, Long id, Long isInBin) {
+        return messageRepository.findAllByMessageTextContainingAndReceiverIdAndIsInBinOrTitleContainingAndReceiverIdAndIsInBinOrSenderLoginContainingAndReceiverIdAndIsInBin(
+                searchText, id, isInBin,
+                searchText, id, isInBin,
+                searchText, id, isInBin);
     }
 
-    public List<Message> searchSentByMessageText(String searchText, Long id) {
-        return messageRepository.findAllByMessageTextContainingAndSenderIdOrTitleContainingAndSenderIdOrReceiverLoginContainingAndSenderId(searchText, id, searchText, id, searchText, id);
+    public List<Message> searchSentByMessageText(String searchText, Long id, Long isInBin) {
+        return messageRepository.findAllByMessageTextContainingAndSenderIdAndIsInBinOrTitleContainingAndSenderIdAndIsInBinOrReceiverLoginContainingAndSenderIdAndIsInBin(
+                searchText, id, isInBin,
+                searchText, id, isInBin,
+                searchText, id, isInBin);
     }
 
-    public List<Message> searchBinByMessageText(String searchText, Long id) {
-        return messageRepository.findByMessageTextContainingAndSenderIdOrReceiverId(searchText, id, id);
+    public List<Message> searchBinByMessageText(String searchText, Long id, Long isInBin) {
+        return messageRepository.findAllByMessageTextContainingAndReceiverIdAndIsInBinOrTitleContainingAndReceiverIdAndIsInBinOrSenderLoginContainingAndReceiverIdAndIsInBin(
+                searchText, id, isInBin,
+                searchText, id, isInBin,
+                searchText, id, isInBin);
     }
 
     public List<Message> findMessagesByIds(List<Long> ids) {

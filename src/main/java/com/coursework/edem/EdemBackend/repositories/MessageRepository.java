@@ -30,12 +30,15 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
     @Query("UPDATE Message m SET m.isInBin = ?1 WHERE m.id IN ?2")
     void setMessageIsInBinByIds(int isInBin, List<Long> messageIds);
 
-    // поиск по входящим
-    List<Message> findAllByMessageTextContainingAndReceiverIdOrTitleContainingAndReceiverIdOrSenderLoginContainingAndReceiverId(String searchText1, Long receiverId1, String searchText2, Long receiverId2, String searchText3, Long receiverId3);
+    // поиск по входящим/корзине
+    List<Message> findAllByMessageTextContainingAndReceiverIdAndIsInBinOrTitleContainingAndReceiverIdAndIsInBinOrSenderLoginContainingAndReceiverIdAndIsInBin(
+            String searchText1, Long receiverId1, Long isInBin1,
+            String searchText2, Long receiverId2, Long isInBin2,
+            String searchText3, Long receiverId3, Long isInBin3);
 
     // поиск по отправленным
-    List<Message> findAllByMessageTextContainingAndSenderIdOrTitleContainingAndSenderIdOrReceiverLoginContainingAndSenderId(String searchText1, Long senderId1, String searchText2, Long senderId2, String searchText3, Long senderId3);
-
-    // поиск по корзине
-    List<Message> findByMessageTextContainingAndSenderIdOrReceiverId(String searchText, Long senderId, Long receiverId);
+    List<Message> findAllByMessageTextContainingAndSenderIdAndIsInBinOrTitleContainingAndSenderIdAndIsInBinOrReceiverLoginContainingAndSenderIdAndIsInBin(
+            String searchText1, Long receiverId1, Long isInBin1,
+            String searchText2, Long receiverId2, Long isInBin2,
+            String searchText3, Long receiverId3, Long isInBin3);
 }

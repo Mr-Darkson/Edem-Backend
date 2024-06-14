@@ -93,7 +93,7 @@ public class MessageController {
     public String searchMailbox(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
         if (!(searchText == null) || !(searchText.isEmpty())) {
             model.addAttribute("person", personDetails.getPerson());
-            List<Message> messages = messageService.searchMailboxByMessageText(searchText, personDetails.getPerson().getId());
+            List<Message> messages = messageService.searchMailboxByMessageText(searchText, personDetails.getPerson().getId(), 0L);
             model.addAttribute("messages", messages);
             model.addAttribute("filesToUpload", new AvatarFile());
             model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
@@ -134,7 +134,7 @@ public class MessageController {
     public String searchSent(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
         if (!(searchText == null) || !(searchText.isEmpty())) {
             model.addAttribute("person", personDetails.getPerson());
-            List<Message> messages = messageService.searchSentByMessageText(searchText, personDetails.getPerson().getId());
+            List<Message> messages = messageService.searchSentByMessageText(searchText, personDetails.getPerson().getId(), 0L);
             model.addAttribute("messages", messages);
             model.addAttribute("filesToUpload", new AvatarFile());
             model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
@@ -163,7 +163,7 @@ public class MessageController {
     public String searchBin(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
         if (!(searchText == null) || !(searchText.isEmpty())) {
             model.addAttribute("person", personDetails.getPerson());
-            List<Message> messages = messageService.searchBinByMessageText(searchText, personDetails.getPerson().getId());
+            List<Message> messages = messageService.searchBinByMessageText(searchText, personDetails.getPerson().getId(), 1L);
             model.addAttribute("messages", messages);
             model.addAttribute("filesToUpload", new AvatarFile());
             model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
