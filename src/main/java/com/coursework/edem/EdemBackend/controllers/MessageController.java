@@ -72,7 +72,7 @@ public class MessageController {
             model.addAttribute("person", personDetails.getPerson());
             model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
 
-            return "account/messages/profile";
+            return "account/messages/change";
         }
 
         personService.updatePerson(personDetails.getPerson().getId(), personProfileData);
