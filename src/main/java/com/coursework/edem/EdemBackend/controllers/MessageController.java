@@ -181,8 +181,9 @@ public class MessageController {
     @GetMapping("/message/{id}")
     public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
-        if (message.isPresent()) {
+        if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
             model.addAttribute("Flag", fileService.isAnyFiles(id));
+            model.addAttribute("FlagIsInBin", message.get().getIsInBin() == 1L);
             model.addAttribute("Message", message.get());
             model.addAttribute("filesToUpload", new AvatarFile());
             model.addAttribute("person", personDetails.getPerson());
@@ -207,7 +208,7 @@ public class MessageController {
     @DeleteMapping("/delete/{id}")
     public String deleteMessage(@AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         var message = messageService.findById(id);
-        if (message.isPresent()) {
+        if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
             var currMessage = message.get();
             if (message.get().getSenderId() == personDetails.getPerson().getId()) {
                 messageService.delete(currMessage);
@@ -226,7 +227,7 @@ public class MessageController {
     @PatchMapping("/restore/{id}")
     public String restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
-        if (message.isPresent()) {
+        if (message.isPresent() && (message.get().getReceiverId() == personDetails.getPerson().getId())) {
             var currMessage = message.get();
             if (currMessage.getReceiverId() == personDetails.getPerson().getId()) {
                 currMessage.setIsInBin(0L);
@@ -238,7 +239,10 @@ public class MessageController {
 
     @GetMapping("/download/{id}")
     public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
-        fileService.downloadFilesFromServer(id, response);
+        var message = messageService.findById(id);
+        if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
+            fileService.downloadFilesFromServer(id, response);
+        }
     }
 
 
