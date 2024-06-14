@@ -130,8 +130,6 @@ public class MessageController {
     }
 
 
-
-
     @PostMapping("/sent/search")
     public String searchSent(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
         if (!(searchText == null) || !(searchText.isEmpty())) {
@@ -206,7 +204,7 @@ public class MessageController {
         return "redirect:/service/message/{id}";
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteMessage(@AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         var message = messageService.findById(id);
         if (message.isPresent()) {
@@ -225,8 +223,8 @@ public class MessageController {
         return "redirect:/service/mailbox";
     }
 
-    @GetMapping("/restore/{id}")
-    public void restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
+    @PatchMapping("/restore/{id}")
+    public String restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
         if (message.isPresent()) {
             var currMessage = message.get();
@@ -235,6 +233,7 @@ public class MessageController {
                 messageService.save(currMessage);
             }
         }
+        return "redirect:/service/mailbox";
     }
 
     @GetMapping("/download/{id}")
