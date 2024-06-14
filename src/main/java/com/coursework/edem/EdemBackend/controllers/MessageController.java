@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -216,10 +215,9 @@ public class MessageController {
             if (message.get().getSenderId() == personDetails.getPerson().getId()) {
                 messageService.delete(currMessage);
             } else {
-                if (currMessage.getIsInBin() == 1L){
+                if (currMessage.getIsInBin() == 1L) {
                     messageService.delete(currMessage);
-                }
-                else{
+                } else {
                     currMessage.setIsInBin(1L);
                     messageService.save(currMessage);
                 }
@@ -229,21 +227,21 @@ public class MessageController {
     }
 
     @GetMapping("/restore/{id}")
-    public void restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id){
+    public void restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
-        if (message.isPresent()){
+        if (message.isPresent()) {
             var currMessage = message.get();
-            if (currMessage.getReceiverId() == personDetails.getPerson().getId()){
+            if (currMessage.getReceiverId() == personDetails.getPerson().getId()) {
                 currMessage.setIsInBin(0L);
                 messageService.save(currMessage);
             }
         }
     }
+
     @GetMapping("/download/{id}")
     public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         fileService.downloadFilesFromServer(id, response);
     }
-
 
 
 }
