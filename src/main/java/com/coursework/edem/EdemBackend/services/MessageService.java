@@ -57,11 +57,26 @@ public class MessageService {
         return messageRepository.findByMessageTextContainingAndSenderIdOrReceiverId(searchText, id, id);
     }
 
+    public List<Message> findMessagesByIds(List<Long> ids) {
+        return messageRepository.findAllByIdIn(ids);
+    }
+
+    @Transactional
+    public void deleteMessagesByIds(List<Long> ids) {
+        messageRepository.deleteAllByIdIn(ids);
+    }
+
+    @Transactional
+    public void setMessageIsInBinByIds(List<Long> messageIds, int updateValue) {
+        messageRepository.setMessageIsInBinByIds(updateValue, messageIds);
+    }
+
     @Transactional
     public void save(Message message) {
         messageRepository.save(message);
     }
 
+    @Transactional
     public void delete(Message message) {
         messageRepository.delete(message);
     }

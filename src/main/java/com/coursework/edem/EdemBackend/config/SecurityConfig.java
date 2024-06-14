@@ -54,6 +54,7 @@ public class SecurityConfig {
                         .requestMatchers("/*").permitAll()
                         .requestMatchers("/auth/*").permitAll()
                         .requestMatchers("/service/**").fullyAuthenticated()
+                        .requestMatchers("/service/api/deleteMessages").fullyAuthenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(httpSecurityFormLoginConfigurer -> {
