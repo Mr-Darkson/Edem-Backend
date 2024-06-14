@@ -39,6 +39,10 @@ public class MessageService {
         return messageRepository.findByMessageTextContainingAndSenderIdOrReceiverId(searchText, id, id);
     }
 
+    public List<Message> findAllByReceiverIdAndIsInBin(Long receiverId, Long isInBin){
+        return messageRepository.findAllByReceiverIdAndIsInBin(receiverId, isInBin);
+    }
+
     @Transactional
     public void save(Message message) {
         messageRepository.save(message);

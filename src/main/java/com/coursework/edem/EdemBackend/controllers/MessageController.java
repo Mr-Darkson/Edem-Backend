@@ -20,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -150,7 +151,8 @@ public class MessageController {
     @GetMapping("/bin")
     public String bin(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
-        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
+        List<Message> messages = messageService.findAllByReceiverIdAndIsInBin(personDetails.getPerson().getId(), 1L);
+        messages.sort((a,b)->b.getId().compareTo(a.getId()));
         model.addAttribute("messages", messages);
         model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
