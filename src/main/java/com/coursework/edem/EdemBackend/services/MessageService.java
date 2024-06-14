@@ -27,6 +27,24 @@ public class MessageService {
         return messageRepository.findById(id);
     }
 
+    public List<Message> findMailboxMessages(Long id) {
+        var messages = messageRepository.findAllByReceiverIdAndIsInBin(id, 0L);
+        messages.sort((a, b) -> b.getId().compareTo(a.getId()));
+        return messages;
+    }
+
+    public List<Message> findSentMessages(Long id) {
+        var messages = messageRepository.findAllBySenderIdAndIsInBin(id, 0L);
+        messages.sort((a, b) -> b.getId().compareTo(a.getId()));
+        return messages;
+    }
+
+    public List<Message> findBinMessages(Long id) {
+        var messages = messageRepository.findAllByReceiverIdAndIsInBin(id, 1L);
+        messages.sort((a, b) -> b.getId().compareTo(a.getId()));
+        return messages;
+    }
+
     public List<Message> searchMailboxByMessageText(String searchText, Long id) {
         return messageRepository.findAllByMessageTextContainingAndReceiverIdOrTitleContainingAndReceiverIdOrSenderLoginContainingAndReceiverId(searchText, id, searchText, id, searchText, id);
     }
@@ -37,10 +55,6 @@ public class MessageService {
 
     public List<Message> searchBinByMessageText(String searchText, Long id) {
         return messageRepository.findByMessageTextContainingAndSenderIdOrReceiverId(searchText, id, id);
-    }
-
-    public List<Message> findAllByReceiverIdAndIsInBin(Long receiverId, Long isInBin){
-        return messageRepository.findAllByReceiverIdAndIsInBin(receiverId, isInBin);
     }
 
     @Transactional

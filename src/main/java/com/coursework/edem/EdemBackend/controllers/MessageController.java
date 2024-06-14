@@ -83,7 +83,7 @@ public class MessageController {
     @GetMapping("/mailbox")
     public String mailbox(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
-        List<Message> messages = messageService.findAllByReceiverId(personDetails.getPerson().getId()).reversed();
+        List<Message> messages = messageService.findMailboxMessages(personDetails.getPerson().getId()).reversed();
         model.addAttribute("messages", messages);
         model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
@@ -123,7 +123,7 @@ public class MessageController {
     @GetMapping("/sent")
     public String sent(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
-        List<Message> messages = messageService.findAllBySenderId(personDetails.getPerson().getId()).reversed();
+        List<Message> messages = messageService.findSentMessages(personDetails.getPerson().getId()).reversed();
         model.addAttribute("messages", messages);
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/sent";
@@ -151,8 +151,7 @@ public class MessageController {
     @GetMapping("/bin")
     public String bin(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
-        List<Message> messages = messageService.findAllByReceiverIdAndIsInBin(personDetails.getPerson().getId(), 1L);
-        messages.sort((a,b)->b.getId().compareTo(a.getId()));
+        List<Message> messages = messageService.findBinMessages(personDetails.getPerson().getId());
         model.addAttribute("messages", messages);
         model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));

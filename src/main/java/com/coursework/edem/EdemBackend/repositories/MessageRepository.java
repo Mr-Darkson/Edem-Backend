@@ -15,6 +15,10 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     List<Message> findAllByReceiverId(Long receiverId);
 
+    List<Message> findAllByReceiverIdAndIsInBin(Long receiverId, Long isInBin);
+
+    List<Message> findAllBySenderIdAndIsInBin(Long receiverId, Long isInBin);
+
     // поиск по входящим
     List<Message> findAllByMessageTextContainingAndReceiverIdOrTitleContainingAndReceiverIdOrSenderLoginContainingAndReceiverId(String searchText1, Long receiverId1, String searchText2, Long receiverId2, String searchText3, Long receiverId3);
 
@@ -23,7 +27,4 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
 
     // поиск по корзине
     List<Message> findByMessageTextContainingAndSenderIdOrReceiverId(String searchText, Long senderId, Long receiverId);
-
-    // Здесь нужен запрос аля findAllByReceiverId Where IsInBin==1
-    List<Message> findAllByReceiverIdAndIsInBin(Long receiverId, Long isInBin); // единицу нужно класть в метод вручную при его вызове // Спасибо!
 }
