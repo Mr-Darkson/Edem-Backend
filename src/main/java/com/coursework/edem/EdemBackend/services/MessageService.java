@@ -29,19 +29,19 @@ public class MessageService {
 
     public List<Message> findMailboxMessages(Long id) {
         var messages = messageRepository.findAllByReceiverIdAndIsInBin(id, 0L);
-        messages.sort((a, b) -> b.getId().compareTo(a.getId()));
+        messages.sort((a, b) -> -1 * b.getId().compareTo(a.getId()));
         return messages;
     }
 
     public List<Message> findSentMessages(Long id) {
         var messages = messageRepository.findAllBySenderIdAndIsInBin(id, 0L);
-        messages.sort((a, b) -> b.getId().compareTo(a.getId()));
+        messages.sort((a, b) -> -1 * b.getId().compareTo(a.getId()));
         return messages;
     }
 
     public List<Message> findBinMessages(Long id) {
         var messages = messageRepository.findAllByReceiverIdAndIsInBin(id, 1L);
-        messages.sort((a, b) -> b.getId().compareTo(a.getId()));
+        messages.sort((a, b) -> -1 * b.getId().compareTo(a.getId()));
         return messages;
     }
 

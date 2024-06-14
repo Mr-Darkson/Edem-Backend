@@ -20,7 +20,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Comparator;
 import java.util.List;
 
 @Controller
@@ -125,9 +124,11 @@ public class MessageController {
         model.addAttribute("person", personDetails.getPerson());
         List<Message> messages = messageService.findSentMessages(personDetails.getPerson().getId()).reversed();
         model.addAttribute("messages", messages);
+        model.addAttribute("filesToUpload", new AvatarFile());
         model.addAttribute("personData", personService.getPersonById(personDetails.getPerson().getId()));
         return "account/messages/sent";
     }
+
 
     @PostMapping("/sent/search")
     public String searchSent(@AuthenticationPrincipal PersonDetails personDetails, Model model, @RequestParam("searchInput") String searchText) {
@@ -180,13 +181,9 @@ public class MessageController {
     @GetMapping("/message/{id}")
     public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
-        if (message.isPresent()) {
-            if (message.get().getReceiverId() == personDetails.getPerson().getId()) {
-                model.addAttribute("Email", message.get().getSenderLogin());
-            } else {
-                model.addAttribute("Email", message.get().getReceiverLogin());
-            }
+        if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
             model.addAttribute("Flag", fileService.isAnyFiles(id));
+            model.addAttribute("FlagIsInBin", message.get().getIsInBin() == 1L);
             model.addAttribute("Message", message.get());
             model.addAttribute("filesToUpload", new AvatarFile());
             model.addAttribute("person", personDetails.getPerson());
@@ -208,18 +205,17 @@ public class MessageController {
         return "redirect:/service/message/{id}";
     }
 
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public String deleteMessage(@AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
         var message = messageService.findById(id);
-        if (message.isPresent()) {
+        if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
             var currMessage = message.get();
             if (message.get().getSenderId() == personDetails.getPerson().getId()) {
                 messageService.delete(currMessage);
             } else {
-                if (currMessage.getIsInBin() == 1L){
+                if (currMessage.getIsInBin() == 1L) {
                     messageService.delete(currMessage);
-                }
-                else{
+                } else {
                     currMessage.setIsInBin(1L);
                     messageService.save(currMessage);
                 }
@@ -228,22 +224,26 @@ public class MessageController {
         return "redirect:/service/mailbox";
     }
 
-    @GetMapping("/restore/{id}")
-    public void restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id){
+    @PatchMapping("/restore/{id}")
+    public String restoreMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
-        if (message.isPresent()){
+        if (message.isPresent() && (message.get().getReceiverId() == personDetails.getPerson().getId())) {
             var currMessage = message.get();
-            if (currMessage.getReceiverId() == personDetails.getPerson().getId()){
+            if (currMessage.getReceiverId() == personDetails.getPerson().getId()) {
                 currMessage.setIsInBin(0L);
                 messageService.save(currMessage);
             }
         }
-    }
-    @GetMapping("/download/{id}")
-    public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
-        fileService.downloadFilesFromServer(id, response);
+        return "redirect:/service/mailbox";
     }
 
+    @GetMapping("/download/{id}")
+    public void downloadFile(HttpServletResponse response, @AuthenticationPrincipal PersonDetails personDetails, @PathVariable Long id) {
+        var message = messageService.findById(id);
+        if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
+            fileService.downloadFilesFromServer(id, response);
+        }
+    }
 
 
 }
