@@ -180,11 +180,11 @@ public class MessageController {
     public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
         var message = messageService.findById(id);
         if (message.isPresent()) {
-            if (message.get().getReceiverId() == personDetails.getPerson().getId()) {
-                model.addAttribute("Email", message.get().getSenderLogin());
-            } else {
-                model.addAttribute("Email", message.get().getReceiverLogin());
-            }
+//            if (message.get().getReceiverId() == personDetails.getPerson().getId()) {
+//                model.addAttribute("Email", message.get().getSenderLogin());
+//            } else {
+//                model.addAttribute("Email", message.get().getReceiverLogin());
+//            }
             model.addAttribute("Flag", fileService.isAnyFiles(id));
             model.addAttribute("Message", message.get());
             model.addAttribute("filesToUpload", new AvatarFile());
