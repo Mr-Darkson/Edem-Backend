@@ -6011,7 +6011,7 @@ a {
   }
 
   .include-new__menu-wrapper {
-    max-height: 1800px;
+    max-height: calc((1vw + 1vh) * 22);
   }
 
   .include-new__menu-3 {

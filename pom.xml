@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>com.coursework.edem</groupId>
 	<artifactId>Edem-Backend</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>Edem-Backend</name>
-	<description>Backend realise of course workd </description>
+	<description>Backend realise of course work </description>
 	<properties>
 		<java.version>21</java.version>
 	</properties>
