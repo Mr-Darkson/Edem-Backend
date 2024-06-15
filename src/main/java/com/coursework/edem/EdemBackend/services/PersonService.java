@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,18 +43,12 @@ public class PersonService {
     }
 
     @Transactional(readOnly = false)
-    public void deleteAvatar(Long personId) {
-        Person person = personRepository.findById(personId).orElse(null);
+    public void deleteAvatar(Avatar avatar) {
+        String oldAvatarName = avatar.getAvatarName();
+        String oldAvatarPath = System.getProperty("user.dir") + "/src/main/avatars/" + oldAvatarName;
+        File avatarToDelete = new File(oldAvatarPath);
 
-        if (person.getAvatar() != null) {
-            Avatar avatar = avatarRepository.findAvatarByPerson(person).orElse(null);
-            person.setAvatar(null);
-
-            avatar.setPerson(null);
-
-            personRepository.save(person);
-            avatarRepository.delete(avatar);
-        }
+        avatarToDelete.delete();
     }
 
 
@@ -61,8 +56,6 @@ public class PersonService {
     public void updateAvatar(Long id, String newAvatar) {
         Person person = getPersonById(id);
 
-
-        //deleteAvatar(id);
         if (person.getAvatar() == null) {
             Avatar avatar = new Avatar(person, newAvatar);
 
@@ -70,6 +63,9 @@ public class PersonService {
             personRepository.save(person);
         } else {
             Avatar avatar = person.getAvatar();
+
+            deleteAvatar(avatar);
+
             avatar.setAvatarName(newAvatar);
             personRepository.save(person);
         }
