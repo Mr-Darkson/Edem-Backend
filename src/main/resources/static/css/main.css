@@ -762,9 +762,15 @@ a {
 }
 
 .setting-img_change {
-  width: 130px;
-  height: 130px;
+  background: transparent;
+  border-radius: 50%;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: calc((1vw + 1vh) * 5);
+  height: calc((1vw + 1vh) * 5);
   margin-top: calc((1vw + 1vh) * 3);
+  border: 1px solid white;
 }
 
 .setting__login_change {
@@ -3179,9 +3185,26 @@ a {
 }
 
 .setting-img {
-  width: calc((1vw + 1vh) * 7);
-  height: calc((1vw + 1vh) * 7);
+  background: transparent;
+  border-radius: 50%;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: calc((1vw + 1vh) * 5);
+  height: calc((1vw + 1vh) * 5);
   margin-top: calc((1vw + 1vh) * 3);
+  border: 1px solid white;
+}
+
+.setting-img-small {
+  background: transparent;
+  border-radius: 50%;
+  -webkit-box-pack: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  width: calc((1vw + 1vh) * 3);
+  height: calc((1vw + 1vh) * 3);
+  border: 1px solid white;
 }
 
 .setting__login {
