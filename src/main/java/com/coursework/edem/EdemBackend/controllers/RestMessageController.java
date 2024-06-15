@@ -35,16 +35,16 @@ public class RestMessageController {
                 List<Long> toDelete = new ArrayList<>();
                 List<Long> toAddInBin = new ArrayList<>();
                 messages.forEach(x -> {
-                    if(authUserId == x.getReceiverId()) {
+                    if(x.getSenderId() == authUserId) {
+                        toDelete.add(x.getId());
+                    }
+                    else if(authUserId == x.getReceiverId()) {
                         if(x.getIsInBin() == 1L) {
                             toDelete.add(x.getId());
                         }
                         else {
                             toAddInBin.add(x.getId());
                         }
-                    }
-                    else if(x.getSenderId() == authUserId) {
-                        toDelete.add(x.getId());
                     }
                 });
 
