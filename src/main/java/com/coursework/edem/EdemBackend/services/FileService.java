@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
+import static com.coursework.edem.EdemBackend.utils.FileUtil.deleteFile;
 
 
 @Service
@@ -42,6 +45,16 @@ public class FileService {
                 System.out.println("Error filename!");
             }
         }
+    }
+
+    public void deleteFilesFromServerByIds(List<Long> messageIds){
+        for (Long messageId : messageIds){
+            deleteFilesFromServer(messageId);
+        }
+    }
+    public void deleteFilesFromServer(Long messageId){
+        var fileData = fileRepository.findByMessageId(messageId);
+        fileData.ifPresent(file -> deleteFile(file.getFilename()));
     }
 
     public boolean isAnyFiles(Long messageId){

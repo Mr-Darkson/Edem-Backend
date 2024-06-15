@@ -2,6 +2,7 @@ package com.coursework.edem.EdemBackend.controllers;
 
 import com.coursework.edem.EdemBackend.models.Message;
 import com.coursework.edem.EdemBackend.security.PersonDetails;
+import com.coursework.edem.EdemBackend.services.FileService;
 import com.coursework.edem.EdemBackend.services.MessageService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ import java.util.Map;
 public class RestMessageController {
 
     private final MessageService messageService;
+    private final FileService fileService;
     @PostMapping("/deleteMessages")
     public ResponseEntity<String> deleteMessages(@AuthenticationPrincipal PersonDetails personDetails, @RequestBody Map<String, List<Long>> json) {
         List<Long> ids = json.getOrDefault("ids", null);
@@ -49,6 +51,7 @@ public class RestMessageController {
                 });
 
                 if(!toDelete.isEmpty()) {
+                    fileService.deleteFilesFromServerByIds(toDelete);
                     messageService.deleteMessagesByIds(toDelete);
                 }
                 if(!toAddInBin.isEmpty()) {

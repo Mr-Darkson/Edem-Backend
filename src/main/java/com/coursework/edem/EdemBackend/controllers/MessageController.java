@@ -211,9 +211,11 @@ public class MessageController {
         if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
             var currMessage = message.get();
             if (message.get().getSenderId() == personDetails.getPerson().getId()) {
+                fileService.deleteFilesFromServer(currMessage.getId());
                 messageService.delete(currMessage);
             } else {
                 if (currMessage.getIsInBin() == 1L) {
+                    fileService.deleteFilesFromServer(currMessage.getId());
                     messageService.delete(currMessage);
                 } else {
                     currMessage.setIsInBin(1L);

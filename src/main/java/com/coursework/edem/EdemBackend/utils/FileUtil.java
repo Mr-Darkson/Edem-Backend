@@ -49,4 +49,17 @@ public class FileUtil {
         inputStream.close();
         outputStream.close();
     }
+
+    public static void deleteFile(String name){
+        String pathToFile = System.getProperty("user.dir") + "/src/main/data/" + name;
+        File file = new File(pathToFile);
+        if (file.exists() && file.isFile()){
+            try{
+                file.delete();
+            }
+            catch (SecurityException e){
+                e.printStackTrace();
+            }
+        }
+    }
 }
