@@ -4361,8 +4361,8 @@ a {
   -webkit-box-pack: center;
   -ms-flex-pack: center;
   justify-content: center;
-  width: calc((1vw + 1vh) * 2.6);
-  height: calc((1vw + 1vh) * 2.6);
+  width: calc((1vw + 1vh) * 2.4);
+  height: calc((1vw + 1vh) * 2.4);
   border: 1px solid white;
 }
 
