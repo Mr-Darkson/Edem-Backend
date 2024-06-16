@@ -18,6 +18,7 @@ public class AvatarService {
     @Autowired
     private PersonRepository personRepository;
 
+    // для intellij
     public File getAvatarByPersonId(Long id) {
         Person person = personRepository.findById(id).orElse(null);
         Avatar avatar = avatarRepository.findAvatarByPerson(person).orElse(null);
@@ -31,4 +32,22 @@ public class AvatarService {
 
         return new File(filePath);
     }
+
+    // для ручного запуска
+//    public File getAvatarByPersonId(Long id) {
+//        Person person = personRepository.findById(id).orElse(null);
+//        Avatar avatar = avatarRepository.findAvatarByPerson(person).orElse(null);
+//
+//        String filePath;
+//        if (avatar == null) {
+//            filePath = System.getProperty("user.dir") + "/classes/static/img/sms/Ellipse.png";
+//        } else {
+//            filePath = System.getProperty("user.dir") + "/src/main/avatars/" + avatar.getAvatarName();
+//        }
+//
+//        return new File(filePath);
+//    }
+
 }
+
+
