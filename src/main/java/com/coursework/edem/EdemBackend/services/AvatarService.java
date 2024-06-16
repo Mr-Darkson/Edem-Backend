@@ -40,7 +40,6 @@ public class AvatarService {
         String filePath;
         if (avatar == null) {
             filePath = System.getProperty("user.dir") + "/classes/static/img/sms/Ellipse.png";
-            System.out.println(filePath);
         } else {
             filePath = System.getProperty("user.dir") + "/src/main/avatars/" + avatar.getAvatarName();
         }
