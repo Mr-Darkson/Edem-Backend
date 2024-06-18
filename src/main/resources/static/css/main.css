@@ -5861,6 +5861,10 @@ a {
   align-items: center;
 }
 
+.hidden {
+    display: none;
+}
+
 .social {
   list-style: none;
   padding: 0;

@@ -2,21 +2,31 @@
 let cbx = document.querySelectorAll('.readmeorno-span');
 const deleteButton = document.getElementById('deleteButton');
 const selectAll = document.getElementById("highlight-message");
+let bt = document.getElementById('highlight-message')
+
 deleteButton.addEventListener("click", deleteSelectedMessages);
 selectAll.addEventListener("click",selectAllCheckboxes); //ADD SELECTED ALL FUNCTION TO BUTTON
+window.addEventListener("load", checkCheckboxes);
 cbx.forEach(c => {
-    c.addEventListener('change', function() {
-        const checkedCheckboxes = document.querySelectorAll('.readmeorno-span:checked');
-        if (checkedCheckboxes.length > 0) {
-            deleteButton.classList.remove('hidden');
-        } else {
-            deleteButton.classList.add('hidden');
-        }
-    });
+    c.addEventListener('change', checkCheckboxes);
 })
 
 
+function checkCheckboxes() {
+    const checkedCheckboxes = document.querySelectorAll('.readmeorno-span:checked');
+    if (checkedCheckboxes.length > 0) {
+        deleteButton.classList.remove('hidden');
+        bt.removeEventListener('click', selectAllCheckboxes);
+        bt.addEventListener('click', deselectAllCheckboxes);
+        document.querySelector('.one_block-text').innerText = 'Снять выделение';
 
+    } else {
+        deleteButton.classList.add('hidden');
+        bt.removeEventListener('click', deselectAllCheckboxes);
+        bt.addEventListener('click', selectAllCheckboxes);
+        document.querySelector('.one_block-text').innerText = 'Выделить все';
+    }
+}
 
 //FUNCTIONS
 function selectAllCheckboxes() {
@@ -27,7 +37,7 @@ function selectAllCheckboxes() {
         checkbox.checked = true;
     });
 
-    let bt = document.getElementById('highlight-message')
+
     bt.removeEventListener('click', selectAllCheckboxes);
     bt.addEventListener('click', deselectAllCheckboxes);
     document.querySelector('.one_block-text').innerText = 'Снять выделение';

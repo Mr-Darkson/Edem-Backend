@@ -61,4 +61,12 @@ public class FileService {
         Optional<File> files = fileRepository.findByMessageId(messageId);
         return files.isPresent();
     }
+
+    public void saveFileWithName (String fileName, Long messageId) {
+        fileRepository.save(new File(messageId, fileName));
+    }
+
+    public Optional<File> findFileByMessageId(Long messageId) {
+        return fileRepository.findByMessageId(messageId);
+    }
 }
