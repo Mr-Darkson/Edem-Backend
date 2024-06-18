@@ -21,6 +21,10 @@ public class FileUtil {
     }
 
     public static void uploadMutlipleFiles(MultipartFile[] multipartFile, String filePath, String fileName) throws IOException {
+        File targetFile = new File(filePath);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
         ZipOutputStream archive = new ZipOutputStream(new FileOutputStream(filePath + fileName));
         for (int i = 0; i < multipartFile.length; i++) {
             ZipEntry file = new ZipEntry(multipartFile[i].getOriginalFilename());
@@ -32,7 +36,7 @@ public class FileUtil {
     }
 
     public static void downloadFile(String name, HttpServletResponse response) throws IOException {
-        String dirPath = System.getProperty("user.dir") + "/src/main/data/" + name;
+        String dirPath = System.getProperty("user.dir") + "/data/" + name;
 
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=" + name);
@@ -51,11 +55,13 @@ public class FileUtil {
     }
 
     public static void deleteFile(String name){
-        String pathToFile = System.getProperty("user.dir") + "/src/main/data/" + name;
+        String pathToFile = System.getProperty("user.dir") + "/data/" + name;
         File file = new File(pathToFile);
         if (file.exists() && file.isFile()){
             try{
-                file.delete();
+                if(file.delete()){
+                    System.out.println("Файл успешно удален!");
+                }
             }
             catch (SecurityException e){
                 e.printStackTrace();

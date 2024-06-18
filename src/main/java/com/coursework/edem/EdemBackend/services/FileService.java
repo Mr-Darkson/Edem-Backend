@@ -22,7 +22,7 @@ public class FileService {
     private final FileRepository fileRepository;
 
     public void uploadFilesToServer(MultipartFile[] multipartFile, Long messageId) {
-        String filePath = System.getProperty("user.dir") + "/src/main/data/";
+        String filePath = System.getProperty("user.dir") + "/data/";
         if (multipartFile.length == 1 && multipartFile[0].isEmpty()) return;
         String fileName = UUID.randomUUID().toString() + ".zip";
         while (fileRepository.findByFilename(fileName).isPresent()) {
