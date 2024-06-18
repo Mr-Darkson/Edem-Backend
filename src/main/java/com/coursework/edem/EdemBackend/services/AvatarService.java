@@ -32,7 +32,7 @@ public class AvatarService {
 //        return new File(filePath);
 //    }
 
-    // для ручного запуска
+
     public File getAvatarByPersonId(Long id) {
         Person person = personRepository.findById(id).orElse(null);
         Avatar avatar = avatarRepository.findAvatarByPerson(person).orElse(null);
@@ -46,4 +46,7 @@ public class AvatarService {
 
         return new File(filePath);
     }
+
 }
+
+

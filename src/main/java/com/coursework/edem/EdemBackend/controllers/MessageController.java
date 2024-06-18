@@ -1,9 +1,6 @@
 package com.coursework.edem.EdemBackend.controllers;
 
-import com.coursework.edem.EdemBackend.models.AvatarFile;
-import com.coursework.edem.EdemBackend.models.Message;
-import com.coursework.edem.EdemBackend.models.Person;
-import com.coursework.edem.EdemBackend.models.PersonProfileData;
+import com.coursework.edem.EdemBackend.models.*;
 import com.coursework.edem.EdemBackend.security.PersonDetails;
 import com.coursework.edem.EdemBackend.services.FileService;
 import com.coursework.edem.EdemBackend.services.MessageService;
@@ -11,6 +8,7 @@ import com.coursework.edem.EdemBackend.services.PersonService;
 import com.coursework.edem.EdemBackend.util.FileValidator;
 import com.coursework.edem.EdemBackend.utils.PersonProfileDataValidator;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,9 +16,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Controller
 @AllArgsConstructor
@@ -119,6 +120,8 @@ public class MessageController {
         return "redirect:/service/mailbox";
     }
 
+
+
     @GetMapping("/sent")
     public String sent(@AuthenticationPrincipal PersonDetails personDetails, Model model) {
         model.addAttribute("person", personDetails.getPerson());
@@ -179,9 +182,10 @@ public class MessageController {
     }
 
     @GetMapping("/message/{id}")
-    public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id) {
+    public String currentMessage(@AuthenticationPrincipal PersonDetails personDetails, Model model, @PathVariable Long id, HttpSession session) {
         var message = messageService.findById(id);
         if (message.isPresent() && (message.get().getSenderId() == personDetails.getPerson().getId() || message.get().getReceiverId() == personDetails.getPerson().getId())) {
+            session.setAttribute("message", message.get());
             model.addAttribute("Flag", fileService.isAnyFiles(id));
             model.addAttribute("FlagIsInBin", message.get().getIsInBin() == 1L);
             model.addAttribute("Message", message.get());
@@ -192,6 +196,27 @@ public class MessageController {
         }
         return "redirect:/service/mailbox";
 
+    }
+
+    @PostMapping("/message/redirect")
+    public String sentRedirect(@SessionAttribute("message") Message message, @AuthenticationPrincipal PersonDetails personDetails, @RequestParam String login, @RequestParam String title, @RequestParam String message_text, SessionStatus sessionStatus) {
+        Person authPerson = personDetails.getPerson();
+        if(message != null && ((authPerson.getId().equals(message.getReceiverId())) || (authPerson.getId().equals(message.getSenderId())) )) {
+            Optional<Person> messageGetter = personService.getPersonByLogin(login);
+            if(messageGetter.isPresent()) {
+                Person res = messageGetter.get();
+
+                Message newMessage = new Message(res.getId(), authPerson.getId(), res.getLogin(), authPerson.getLogin(), title, message_text);
+                messageService.save(newMessage);
+
+                Optional<File> fileFromCurrentMessage = fileService.findFileByMessageId(message.getId());
+                fileFromCurrentMessage.ifPresent(file ->
+                        fileService.saveFileWithName(file.getFilename(), newMessage.getId()));
+                sessionStatus.setComplete();
+            }
+
+        }
+        return "redirect:/service/mailbox";
     }
 
     @PostMapping("/message/{id}") // sendmessage
