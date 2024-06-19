@@ -61,7 +61,7 @@ public class AvatarService {
             File taken = que.poll();
             for(File file : taken.listFiles()) {
                 //System.out.println(file.getAbsolutePath()); log
-                if(file.getAbsolutePath().endsWith("Ellipse.png")) {
+                if(file.getAbsolutePath().endsWith(fileToFind)) {
                     System.out.println(file.getAbsolutePath() + " is FOUND!");
                     return file.getAbsolutePath();
                 }
