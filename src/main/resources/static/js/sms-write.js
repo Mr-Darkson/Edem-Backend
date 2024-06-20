@@ -12,9 +12,11 @@ const toWhom = document.getElementById("submithire")
 
 const sendForm = document.getElementById("sendForm")
 
+const pinFiles = document.getElementById("pinFiles")
+
 
 function reply() {
-
+    pinFiles.classList.remove("hidden")
     toWhom.value = senderLogin.textContent;
     toWhom.readOnly = true;
 
@@ -26,9 +28,11 @@ function reply() {
     modalText.textContent = null;
     modalText.readOnly = false;
 
+
 }
 
 function redirect() {
+    pinFiles.classList.add("hidden")
     toWhom.readOnly = false;
     toWhom.value = ""
 
