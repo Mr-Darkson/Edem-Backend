@@ -12,7 +12,7 @@ CREATE TABLE message (
                          sender_id int REFERENCES person(id) ON DELETE CASCADE,
                          receiver_login VARCHAR REFERENCES person(login) ON DELETE CASCADE,
                          sender_login VARCHAR REFERENCES person(login) ON DELETE CASCADE,
-                         message_text VARCHAR,
+                         message_text TEXT,
                          title VARCHAR,
                          is_in_bin int
 );

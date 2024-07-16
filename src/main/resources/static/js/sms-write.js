@@ -1,6 +1,10 @@
+
+
+
+//SEND-REDIRECT Desktop
+
 document.getElementById("reply-button").addEventListener("click", reply)
 document.getElementById("redirect-button").addEventListener("click", redirect)
-
 
 const modalTheme = document.getElementById("send_letter_theme")
 const modalText = document.getElementById("send_letter_text")
@@ -44,3 +48,8 @@ function redirect() {
     modalText.readOnly = true;
 
 }
+
+//SEND REDIRECT MOBILE
+document.getElementById("reply-button_mb").addEventListener("click", reply)
+document.getElementById("redirect-button_mb").addEventListener("click", redirect)
+
