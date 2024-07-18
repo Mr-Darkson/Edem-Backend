@@ -5551,7 +5551,7 @@ a {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  position: absolute;
+  position: fixed;
   border-radius: 15px 15px 0px 0px;
   height: 7%;
   width: 100%;
